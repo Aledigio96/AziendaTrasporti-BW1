@@ -58,9 +58,7 @@ public class Tessera {
 
     // Setter
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
+
 
     public void setDataEmissione(LocalDate dataEmissione) {
         this.dataEmissione = dataEmissione;
