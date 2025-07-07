@@ -53,11 +53,6 @@ public class Utente {
     }
 
     // Setter
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
     public void setNome(String nome) {
         this.nome = nome;
     }
