@@ -16,10 +16,7 @@
         <class>buildWeek.entities.RivenditoriAutorizzati</class>
         <class>buildWeek.entities.Tratta</class>
 
-        <class>riccardogulin.entities.Animal</class>
-        <class>riccardogulin.entities.Cat</class>
-        <class>riccardogulin.entities.Dog</class>
-        <class>riccardogulin.entities.Owner</class>
+
         <properties>
             <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/aziendatrasporti"/>
 
@@ -28,9 +25,6 @@
             <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
             <property name="hibernate.hbm2ddl.auto" value="update"/>
 
-            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
-            <property name="hibernate.show_sql" value="true"/>
-            <property name="hibernate.format_sql" value="true"/>
         </properties>
     </persistence-unit>
 </persistence>
