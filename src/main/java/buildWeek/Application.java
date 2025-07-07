@@ -36,7 +36,7 @@ public class Application {
         td.save(tratta1);
 
         DistributoreDAO dd = new DistributoreDAO(em);
-        RivenditoriAutorizzati distributore1 = new RivenditoriAutorizzati(tratta1.getZonaPartenza());
+        RivenditoriAutorizzati distributore1 = new RivenditoriAutorizzati(tratta1);
         dd.save(distributore1);
 
         dd.emettiBiglietto(distributore1, mezzo1);

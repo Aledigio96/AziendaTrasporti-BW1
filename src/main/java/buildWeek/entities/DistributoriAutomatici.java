@@ -10,11 +10,11 @@ public class DistributoriAutomatici extends Distributore {
 
     private StatoDistributoreAutomatico stato;
 
-    public DistributoriAutomatici(String zonaPartenza) {
+    public DistributoriAutomatici() {
         super();
     }
 
-    public DistributoriAutomatici(String posizione, StatoDistributoreAutomatico stato) {
+    public DistributoriAutomatici(Tratta posizione, StatoDistributoreAutomatico stato) {
         super(posizione);
         this.stato = stato;
     }

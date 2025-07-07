@@ -15,12 +15,12 @@ public abstract class Distributore {
 
     @ManyToOne
     @JoinColumn(name = "zona_partenza", referencedColumnName = "zonaPartenza", nullable = false)
-    private String posizione;
+    private Tratta posizione;
 
     public Distributore() {
     }
 
-    public Distributore(String posizione) {
+    public Distributore(Tratta posizione) {
         this.posizione = posizione;
     }
 
@@ -28,11 +28,11 @@ public abstract class Distributore {
         return id;
     }
 
-    public String getPosizione() {
+    public Tratta getPosizione() {
         return posizione;
     }
 
-    public void setPosizione(String posizione) {
+    public void setPosizione(Tratta posizione) {
         this.posizione = posizione;
     }
 }

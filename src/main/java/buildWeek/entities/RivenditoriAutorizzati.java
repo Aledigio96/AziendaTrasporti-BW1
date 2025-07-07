@@ -11,7 +11,7 @@ public class RivenditoriAutorizzati extends Distributore {
         super();
     }
 
-    public RivenditoriAutorizzati(String posizione) {
+    public RivenditoriAutorizzati(Tratta posizione) {
         super(posizione);
     }
 }
