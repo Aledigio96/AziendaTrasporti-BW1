@@ -16,10 +16,10 @@ public class TesseraDAO {
     }
 
 
-    public void save(Tessera newutessera){
+    public void save(Tessera newtessera){
         EntityTransaction transaction=  entityManager.getTransaction();
         transaction.begin();
-        entityManager.persist(newutessera);
+        entityManager.persist(newtessera);
         transaction.commit();
         System.out.println("tessera salvata con successo");
     }

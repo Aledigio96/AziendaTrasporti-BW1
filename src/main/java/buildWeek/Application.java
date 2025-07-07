@@ -1,7 +1,9 @@
 package buildWeek;
 
-import buildWeek.dao.UtenteDAO;
-import buildWeek.entities.Utente;
+import buildWeek.dao.*;
+import buildWeek.entities.*;
+import buildWeek.enums.TipoAbbonamento;
+import buildWeek.enums.TipoMezzo;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
@@ -16,9 +18,29 @@ public class Application {
         UtenteDAO ut=new UtenteDAO(em);
         LocalDate data1=LocalDate.of(1996,01,14);
         Utente utente1= new Utente("Alessandro","Di Giovanni",data1);
-        //ut.save(utente1);
-        Utente utente1FromDB=ut.findById("ea042ca8-5d5e-4c9c-8f72-bf62930905db");
-        System.out.println(utente1FromDB);
-        ut.findByIdandDelete(UUID.fromString("ea042ca8-5d5e-4c9c-8f72-bf62930905db"));
+//        ut.save(utente1);
+//        Utente utente1fromdb = ut.findById("328be5b7-7687-47af-b877-966f314bb0e5");
+
+
+        TesseraDAO tess = new TesseraDAO(em);
+
+        Tessera tessera1 = new Tessera(LocalDate.now(), LocalDate.now().plusYears(1), true, utente1);
+        //tess.save(tessera1);
+
+        MezzoDAO md = new MezzoDAO(em);
+        Mezzo mezzo1 = new Mezzo(TipoMezzo.AUTOBUS, 30, true);
+        md.save(mezzo1);
+
+        TrattaDAO td = new TrattaDAO(em);
+        Tratta tratta1 = new Tratta("Latina", "Roma", 45, mezzo1);
+        td.save(tratta1);
+
+        DistributoreDAO dd = new DistributoreDAO(em);
+        RivenditoriAutorizzati distributore1 = new RivenditoriAutorizzati(tratta1.getZonaPartenza());
+        dd.save(distributore1);
+
+        dd.emettiBiglietto(distributore1, mezzo1);
+
+//        dd.emettiAbbonamento(TipoAbbonamento.SETTIMANALE, tessera1);
     }
 }
