@@ -26,4 +26,6 @@ public class DistributoriAutomatici extends Distributore {
     public void setStato(StatoDistributoreAutomatico stato) {
         this.stato = stato;
     }
+
+
 }

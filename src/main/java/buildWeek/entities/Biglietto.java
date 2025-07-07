@@ -15,7 +15,7 @@ public class Biglietto {
     @ManyToOne
     @JoinColumn(name = "distrubutori_id", nullable = false, unique = true)
     private Distributore distributore;
-    private boolean validazione=false;
+    private boolean validazione;
     private LocalDate orariovalidazione;
     @ManyToOne
     @JoinColumn(name = "mezzo_id", nullable = false, unique = true)

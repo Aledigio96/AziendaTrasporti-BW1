@@ -5,6 +5,7 @@ import buildWeek.entities.Tratta;
 import buildWeek.exceptions.NotFoundException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.Query;
 
 import java.util.UUID;
@@ -17,12 +18,12 @@ public class TrattaDAO {
     }
 
 
-    public void save(Tratta newtratta){
-        EntityTransaction transaction=  entityManager.getTransaction();
+    public void save(Tratta newTratta) {
+        EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
-        entityManager.persist(newtratta);
+        entityManager.persist(newTratta);
         transaction.commit();
-        System.out.println("Tratta salvato con successo");
+        System.out.println("Tratta salvata con successo");
     }
 
 
@@ -32,9 +33,18 @@ public class TrattaDAO {
         return found;
     }
 
+    public Tratta findByZonaPartenza(String zonaPartenza) {
+        try {
+            return entityManager.createQuery(
+                            "SELECT t FROM Tratta t WHERE t.zonaPartenza = :zonaPartenza", Tratta.class)
+                    .setParameter("zonaPartenza", zonaPartenza)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
 
-
-    public void findByIdandDelete(long id) {
+    public void findByIdandDelete(UUID id) {
         EntityTransaction transaction = entityManager.getTransaction();
 
         transaction.begin();
