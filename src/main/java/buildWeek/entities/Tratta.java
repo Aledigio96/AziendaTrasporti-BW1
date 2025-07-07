@@ -3,13 +3,15 @@ package buildWeek.entities;
 
 import jakarta.persistence.*;
 
+import java.util.UUID;
+
 @Entity
 @Table(name = "tratta")
 public class Tratta {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private long id;
+    private UUID id;
 
     @Column(name = "zona_partenza", nullable = false)
     private String zonaPartenza;
@@ -33,7 +35,7 @@ public class Tratta {
         this.mezzo = mezzo;
     }
 
-    public long getId() {
+    public UUID getId() {
         return id;
     }
 
