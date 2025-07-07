@@ -5,6 +5,16 @@
                                  https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
              version="3.0">
     <persistence-unit name="AziendaTrasporti">
+        <class>buildWeek.entities.Mezzo</class>
+        <class>buildWeek.entities.Distributore</class>
+        <class>buildWeek.entities.Amministratore</class>
+        <class>buildWeek.entities.Tessera</class>
+        <class>buildWeek.entities.Utente</class>
+        <class>buildWeek.entities.Abbonamento</class>
+        <class>buildWeek.entities.DistributoriAutomatici</class>
+        <class>buildWeek.entities.Biglietto</class>
+        <class>buildWeek.entities.RivenditoriAutorizzati</class>
+        <class>buildWeek.entities.Tratta</class>
 
         <class>riccardogulin.entities.Animal</class>
         <class>riccardogulin.entities.Cat</class>
