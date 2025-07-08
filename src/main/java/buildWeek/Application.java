@@ -1,47 +1,51 @@
 package buildWeek;
 
+import buildWeek.dao.*;
+import buildWeek.entities.*;
+import buildWeek.enums.StatoDistributoreAutomatico;
+import buildWeek.enums.TipoMezzo;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
+
+import java.time.LocalDate;
 
 public class Application {
     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("AziendaTrasporti");
     public static void main(String[] args) {
         EntityManager em = emf.createEntityManager();
-//        UtenteDAO ut=new UtenteDAO(em);
-//        LocalDate data1=LocalDate.of(1996,01,14);
-//        Utente utente1= new Utente("Alessandro","Di Giovanni",data1);
-////        ut.save(utente1);
-//       Utente utente1fromdb = ut.findById("8068df4c-4dd8-4348-9202-59ecb735d8d4");
+        UtenteDAO ud= new UtenteDAO(em);
+        TrattaDAO td= new TrattaDAO(em);
+        TesseraDAO tessd= new TesseraDAO(em);
+        MezzoDAO md= new MezzoDAO(em);
+        DistributoreDAO dd= new DistributoreDAO(em);
+        BigliettoDAO bd= new BigliettoDAO(em);
+        AbbonamentoDAO ad=new AbbonamentoDAO(em);
+
+//        Utente utente1= new Utente("Alessandro","Di Giovanni","alessandr.g@gmail.com","1234", LocalDate.now().minusYears(29));
+//        ud.save(utente1);
+//        Utente utente1fromdb = ud.findById("a644f18d-6188-4127-bf4d-db5196bd2940");
 //
+//        Tratta tratta1= new Tratta("Roma","Latina");
+//        td.save(tratta1);
 //
-//       TesseraDAO tess = new TesseraDAO(em);
+//        Tessera tessera1= new Tessera(LocalDate.now(),LocalDate.now().minusDays(30),utente1fromdb);
+//        tessd.save(tessera1);
+//        Tessera tessera1fromdb = tessd.findById("5c27cbaa-6107-417a-83a3-458eb2a207c3");
 //
-//        Tessera tessera1 = new Tessera(LocalDate.now(), LocalDate.now().plusYears(1), true, utente1fromdb);
-//        //tess.save(tessera1);
-//        Tessera tessera1fromdb= tess.findById("9b221d99-34c4-4f9d-b0e1-793a3e852b73");
+//        Mezzo mezzo1=new Mezzo(TipoMezzo.AUTOBUS,50);
+//        md.save(mezzo1);
+//        Mezzo mezzo1fromdb = md.findById("575cba6f-16a4-48de-a025-17137cf6b7a6");
 //
-//       MezzoDAO md = new MezzoDAO(em);
-//        Mezzo mezzo1 = new Mezzo(TipoMezzo.AUTOBUS, 30, true);
-////        md.save(mezzo1);
-//        Mezzo mezzo1fromdb = md.findById("eab14c3b-4326-4155-97e9-bf9db8dd193b");
+//        DistributoriAutomatici distributore1= new DistributoriAutomatici("Roma", StatoDistributoreAutomatico.INSERVIZIO);
+//        dd.save(distributore1);
 //
-//        TrattaDAO td = new TrattaDAO(em);
-////        Tratta tratta1 = td.findByZonaPartenza("Latina");
-////        if (tratta1 == null) {
-////            tratta1 = new Tratta("Latina", "Roma", 45, mezzo1fromdb);
-////            td.save(tratta1);
-////        }
-//        Tratta tratta1fromdb = td.findById("ed2a5249-99c9-4166-9c81-47bc29484d5b");
+//        Biglietto biglietto1=new Biglietto(LocalDate.now(),false,LocalDate.now().plusDays(1),mezzo1fromdb);
+//        bd.save(biglietto1);
 //
-//       DistributoreDAO dd = new DistributoreDAO(em);
-//        RivenditoriAutorizzati distributore1 = new RivenditoriAutorizzati(tratta1fromdb);
-//   //     dd.save(distributore1);
-//        Distributore distributore1fromdb = dd.findById("db23a809-dfac-440b-af3d-8c79c61be9c0");
-//
-//        dd.emettiBiglietto(distributore1fromdb, mezzo1fromdb);
-//
-//       dd.emettiAbbonamento(TipoAbbonamento.SETTIMANALE, tessera1fromdb);
+//        Abbonamento abbonamento1=new Abbonamento(LocalDate.now(),LocalDate.now().plusYears(1),tessera1fromdb);
+//        ad.save(abbonamento1);
+
  emf.close();
  em.close();
     }
