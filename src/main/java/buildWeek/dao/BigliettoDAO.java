@@ -48,4 +48,21 @@ public class BigliettoDAO {
 
         System.out.println( "Biglietto cancellato con successo!");
     }
+
+    public void validaBiglietto(UUID id) {
+        EntityTransaction transaction = entityManager.getTransaction();
+        try {
+            transaction.begin();
+            Biglietto biglietto = entityManager.find(Biglietto.class, id);
+            if (biglietto == null) throw new NotFoundException(id.toString());
+            biglietto.setValidazione(true);
+            biglietto.setOrariovalidazione(java.time.LocalDate.now());
+            entityManager.merge(biglietto);
+            transaction.commit();
+            System.out.println("Biglietto validato con successo!");
+        } catch (Exception e) {
+            if (transaction.isActive()) transaction.rollback();
+            throw new RuntimeException("Errore durante la validazione del biglietto", e);
+        }
+    }
 }
