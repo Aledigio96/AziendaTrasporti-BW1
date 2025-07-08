@@ -25,10 +25,6 @@ public class Abbonamento {
     @JoinColumn(name = "tessera_id", nullable = false)
     private Tessera tessera;
 
-    // Per dopo: aggiungi distributore/rivenditore
-    // @ManyToOne
-    // @JoinColumn(name = "punto_vendita_id")
-    // private PuntoVendita puntoVendita;
 
     public Abbonamento() {}
 

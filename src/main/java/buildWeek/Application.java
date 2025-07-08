@@ -55,6 +55,9 @@ public class Application {
 //        mand.save(manutenzione1);
 //        bd.validaBiglietto(UUID.fromString("1608a88d-7947-41c5-a624-7032f3a3c294"));
 //        mand.countManutenzioniPerMezzo(mezzo1fromdb);
+        Abbonamento abbonamento1fromdb= ad.findById("c006d461-6fa0-4b98-82ed-3bdace728722");
+        ad.abbonamentoValidoOscaduto("c006d461-6fa0-4b98-82ed-3bdace728722");
+        
 
 
 

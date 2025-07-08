@@ -7,6 +7,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Query;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 public class AbbonamentoDAO {
@@ -47,5 +48,18 @@ public class AbbonamentoDAO {
         transaction.commit();
 
         System.out.println( "Abbonamento cancellato con successo!");
+    }
+    public boolean abbonamentoValidoOscaduto(String id) {
+        Abbonamento abbonamento = findById(id);
+        LocalDate oggi= LocalDate.now();
+        if ((oggi.isEqual(abbonamento.getDataEmissione()))|| oggi.isAfter(abbonamento.getDataEmissione()) &&
+                (oggi.isEqual(abbonamento.getDataScadenza()))|| oggi.isBefore(abbonamento.getDataScadenza()))
+        {
+            System.out.println("L'abbonamento è valido");
+            return true;
+        } else {
+            System.out.println("L'abbonamento è scaduto");
+            return false;
+        }
     }
 }
