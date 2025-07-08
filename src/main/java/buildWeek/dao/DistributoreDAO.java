@@ -98,5 +98,27 @@ public class DistributoreDAO {
         }
     }
 
+    public void stampaConteggioEmissioni(LocalDate inizio, LocalDate fine) {
+        // Conteggio biglietti
+        Long numeroBiglietti = entityManager.createQuery("""
+            SELECT COUNT(b) FROM Biglietto b
+            WHERE b.dataemissione BETWEEN :inizio AND :fine
+        """, Long.class)
+                .setParameter("inizio", inizio)
+                .setParameter("fine", fine)
+                .getSingleResult();
 
+        // Conteggio abbonamenti
+        Long numeroAbbonamenti = entityManager.createQuery("""
+            SELECT COUNT(a) FROM Abbonamento a
+            WHERE a.dataEmissione BETWEEN :inizio AND :fine
+        """, Long.class)
+                .setParameter("inizio", inizio)
+                .setParameter("fine", fine)
+                .getSingleResult();
+
+        System.out.println("Dal " + inizio + " al " + fine + ":");
+        System.out.println("Biglietti emessi: " + numeroBiglietti);
+        System.out.println("Abbonamenti emessi: " + numeroAbbonamenti);
+    }
 }

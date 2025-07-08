@@ -44,11 +44,11 @@ public class Application {
 //
 //        Biglietto biglietto1=new Biglietto(LocalDate.now(),false,LocalDate.now().plusDays(1),mezzo1fromdb);
 //        bd.save(biglietto1);
-        //Biglietto biglietto1fromdb= bd.findById("1608a88d-7947-41c5-a624-7032f3a3c294");
+//        Biglietto biglietto1fromdb= bd.findById("1608a88d-7947-41c5-a624-7032f3a3c294");
 //
 //        Abbonamento abbonamento1=new Abbonamento(LocalDate.now(),LocalDate.now().plusYears(1),tessera1fromdb);
 //        ad.save(abbonamento1);
-// Abbonamento abbonamento2 = dd.emettiAbbonamento(tessera1fromdb, false);
+//        Abbonamento abbonamento2 = dd.emettiAbbonamento(tessera1fromdb, false);
 //        Abbonamento abbonamento3 = dd.emettiAbbonamento(tessera1fromdb, true);
 
 //        Manutenzione manutenzione1=new Manutenzione(LocalDate.now(),LocalDate.now().minusDays(30),mezzo1fromdb);
@@ -57,7 +57,7 @@ public class Application {
 //        mand.countManutenzioniPerMezzo(mezzo1fromdb);
 
 
-
+//        dd.stampaConteggioEmissioni(LocalDate.of(2025, 7, 1), LocalDate.of(2025, 7, 8));
 
 
  emf.close();
