@@ -70,5 +70,33 @@ public class DistributoreDAO {
             throw new RuntimeException("Errore durante l'emissione del biglietto", e);
         }
     }
-    
+
+    //Emissione abbonamento
+    public Abbonamento emettiAbbonamento(Tessera tessera, boolean settimanale) {
+        EntityTransaction tx = entityManager.getTransaction();
+        try {
+            tx.begin();
+
+            Abbonamento abbonamento = new Abbonamento();
+            LocalDate dataEmissione = LocalDate.now();
+            LocalDate dataScadenza = settimanale
+                    ? dataEmissione.plusWeeks(1)
+                    : dataEmissione.plusMonths(1);// default: mensile
+
+            abbonamento.setDataEmissione(dataEmissione);
+            abbonamento.setDataScadenza(dataScadenza);
+            abbonamento.setTessera(tessera);
+
+            entityManager.persist(abbonamento);
+
+            tx.commit();
+            System.out.println("Abbonamento " + (settimanale ? "settimanale" : "mensile") + " emesso con successo.");
+            return abbonamento;
+        } catch (Exception e) {
+            if (tx.isActive()) tx.rollback();
+            throw new RuntimeException("Errore durante l'emissione dell'abbonamento", e);
+        }
+    }
+
+
 }

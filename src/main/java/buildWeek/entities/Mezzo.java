@@ -54,8 +54,6 @@ public class Mezzo {
         this.capienza = capienza;
     }
 
-
-
     @Override
     public String toString() {
         return "Mezzo{" +

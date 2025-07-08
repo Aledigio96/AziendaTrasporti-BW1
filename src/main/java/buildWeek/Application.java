@@ -32,11 +32,11 @@ public class Application {
 //
 //        Tessera tessera1= new Tessera(LocalDate.now(),LocalDate.now().minusDays(30),utente1fromdb);
 //        tessd.save(tessera1);
-//        Tessera tessera1fromdb = tessd.findById("5c27cbaa-6107-417a-83a3-458eb2a207c3");
+        Tessera tessera1fromdb = tessd.findById("09fe1c1b-9d10-4cbf-9fa6-bac85a0290f1");
 //
 //        Mezzo mezzo1=new Mezzo(TipoMezzo.AUTOBUS,50);
 //        md.save(mezzo1);
-       Mezzo mezzo1fromdb = md.findById("575cba6f-16a4-48de-a025-17137cf6b7a6");
+//       Mezzo mezzo1fromdb = md.findById("575cba6f-16a4-48de-a025-17137cf6b7a6");
 //
 //        DistributoriAutomatici distributore1= new DistributoriAutomatici("Roma", StatoDistributoreAutomatico.INSERVIZIO);
 //        dd.save(distributore1);
@@ -46,8 +46,14 @@ public class Application {
 //
 //        Abbonamento abbonamento1=new Abbonamento(LocalDate.now(),LocalDate.now().plusYears(1),tessera1fromdb);
 //        ad.save(abbonamento1);
-        Manutenzione manutenzione1=new Manutenzione(LocalDate.now(),LocalDate.now().minusDays(30),mezzo1fromdb);
-        mand.save(manutenzione1);
+// Abbonamento abbonamento2 = dd.emettiAbbonamento(tessera1fromdb, false);
+//        Abbonamento abbonamento3 = dd.emettiAbbonamento(tessera1fromdb, true);
+
+//        Manutenzione manutenzione1=new Manutenzione(LocalDate.now(),LocalDate.now().minusDays(30),mezzo1fromdb);
+//        mand.save(manutenzione1);
+
+
+
 
  emf.close();
  em.close();
