@@ -21,6 +21,7 @@ public class Application {
         DistributoreDAO dd= new DistributoreDAO(em);
         BigliettoDAO bd= new BigliettoDAO(em);
         AbbonamentoDAO ad=new AbbonamentoDAO(em);
+        ManutenzioneDAO mand= new ManutenzioneDAO(em);
 
 //        Utente utente1= new Utente("Alessandro","Di Giovanni","alessandr.g@gmail.com","1234", LocalDate.now().minusYears(29));
 //        ud.save(utente1);
@@ -35,7 +36,7 @@ public class Application {
 //
 //        Mezzo mezzo1=new Mezzo(TipoMezzo.AUTOBUS,50);
 //        md.save(mezzo1);
-//        Mezzo mezzo1fromdb = md.findById("575cba6f-16a4-48de-a025-17137cf6b7a6");
+       Mezzo mezzo1fromdb = md.findById("575cba6f-16a4-48de-a025-17137cf6b7a6");
 //
 //        DistributoriAutomatici distributore1= new DistributoriAutomatici("Roma", StatoDistributoreAutomatico.INSERVIZIO);
 //        dd.save(distributore1);
@@ -45,6 +46,8 @@ public class Application {
 //
 //        Abbonamento abbonamento1=new Abbonamento(LocalDate.now(),LocalDate.now().plusYears(1),tessera1fromdb);
 //        ad.save(abbonamento1);
+        Manutenzione manutenzione1=new Manutenzione(LocalDate.now(),LocalDate.now().minusDays(30),mezzo1fromdb);
+        mand.save(manutenzione1);
 
  emf.close();
  em.close();

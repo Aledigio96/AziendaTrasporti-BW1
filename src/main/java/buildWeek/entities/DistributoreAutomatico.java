@@ -7,15 +7,15 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "distributori_automatici")
-public class DistributoriAutomatici extends Distributore {
+public class DistributoreAutomatico extends Distributore {
     @Enumerated
     private StatoDistributoreAutomatico stato;
 
-    public DistributoriAutomatici() {
+    public DistributoreAutomatico() {
         super();
     }
 
-    public DistributoriAutomatici(String posizione, StatoDistributoreAutomatico stato) {
+    public DistributoreAutomatico(String posizione, StatoDistributoreAutomatico stato) {
         super(posizione);
         this.stato = stato;
     }

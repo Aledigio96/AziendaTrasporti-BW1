@@ -5,13 +5,13 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "rivenditori_autorizzati")
-public class RivenditoriAutorizzati extends Distributore {
+public class RivenditoreAutorizzato extends Distributore {
 
-    public RivenditoriAutorizzati() {
+    public RivenditoreAutorizzato() {
         super();
     }
 
-    public RivenditoriAutorizzati(String posizione) {
+    public RivenditoreAutorizzato(String posizione) {
         super(posizione);
     }
 }

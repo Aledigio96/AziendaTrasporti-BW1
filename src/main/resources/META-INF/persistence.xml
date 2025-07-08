@@ -11,10 +11,12 @@
         <class>buildWeek.entities.Tessera</class>
         <class>buildWeek.entities.Utente</class>
         <class>buildWeek.entities.Abbonamento</class>
-        <class>buildWeek.entities.DistributoriAutomatici</class>
+        <class>buildWeek.entities.DistributoreAutomatico</class>
         <class>buildWeek.entities.Biglietto</class>
-        <class>buildWeek.entities.RivenditoriAutorizzati</class>
+        <class>buildWeek.entities.RivenditoreAutorizzato</class>
         <class>buildWeek.entities.Tratta</class>
+        <class>buildWeek.entities.Manutenzione</class>
+        <class>buildWeek.entities.Percorrenza</class>
 
 
         <properties>

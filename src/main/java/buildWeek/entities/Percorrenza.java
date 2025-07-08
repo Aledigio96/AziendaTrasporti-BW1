@@ -6,7 +6,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "percorrenze")
-public class Percorrenze {
+public class Percorrenza {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -20,9 +20,9 @@ public class Percorrenze {
     @JoinColumn(name = "tratta", nullable = false)
     private Tratta idTratta;
 
-    public Percorrenze(){}
+    public Percorrenza(){}
 
-    public Percorrenze( int tempoPrevisto, int tempoEffettivo, Mezzo idMezzo, Tratta idTratta) {
+    public Percorrenza(int tempoPrevisto, int tempoEffettivo, Mezzo idMezzo, Tratta idTratta) {
         this.tempoPrevisto = tempoPrevisto;
         this.tempoEffettivo = tempoEffettivo;
         this.idMezzo = idMezzo;
