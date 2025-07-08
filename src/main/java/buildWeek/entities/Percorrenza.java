@@ -51,11 +51,11 @@ public class Percorrenza {
         this.tempoEffettivo = tempoEffettivo;
     }
 
-    public Mezzo getIdMezzo() {
+    public Mezzo getMezzo() {
         return mezzo;
     }
 
-    public void setIdMezzo(Mezzo mezzo) {
+    public void setMezzo(Mezzo mezzo) {
         this.mezzo = mezzo;
     }
 
@@ -73,7 +73,7 @@ public class Percorrenza {
                 "id=" + id +
                 ", tempoPrevisto=" + tempoPrevisto +
                 ", tempoEffettivo=" + tempoEffettivo +
-                ", idMezzo=" + mezzo +
+                ", mezzo=" + mezzo +
                 ", idTratta=" + idTratta +
                 '}';
     }
