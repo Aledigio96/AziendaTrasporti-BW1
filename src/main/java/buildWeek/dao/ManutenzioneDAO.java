@@ -2,6 +2,7 @@ package buildWeek.dao;
 
 import buildWeek.entities.Biglietto;
 import buildWeek.entities.Manutenzione;
+import buildWeek.entities.Mezzo;
 import buildWeek.exceptions.NotFoundException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
@@ -47,5 +48,17 @@ public class ManutenzioneDAO {
         transaction.commit();
 
         System.out.println( "Manutenzione cancellata con successo!");
+    }
+    public long countManutenzioniPerMezzo(Mezzo idMezzo) {
+        EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        Query query = entityManager.createQuery("SELECT count(m) FROM Manutenzione m WHERE m.idMezzo = :idMezzo");
+        query.setParameter("idMezzo", idMezzo);
+        Object result = query.getSingleResult();
+        Long count = (Long) result;
+        transaction.commit();
+        System.out.println("Numero di manutenzioni per il mezzo: " + count);
+
+        return count;
     }
 }

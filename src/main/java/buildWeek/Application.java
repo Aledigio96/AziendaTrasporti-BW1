@@ -47,7 +47,8 @@ public class Application {
 //        Abbonamento abbonamento1=new Abbonamento(LocalDate.now(),LocalDate.now().plusYears(1),tessera1fromdb);
 //        ad.save(abbonamento1);
         Manutenzione manutenzione1=new Manutenzione(LocalDate.now(),LocalDate.now().minusDays(30),mezzo1fromdb);
-        mand.save(manutenzione1);
+        //mand.save(manutenzione1);
+        mand.countManutenzioniPerMezzo(mezzo1fromdb);
 
  emf.close();
  em.close();

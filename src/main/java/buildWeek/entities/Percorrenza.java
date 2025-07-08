@@ -14,18 +14,19 @@ public class Percorrenza {
     private int tempoPrevisto;//in minuti
     @Column(name = "tempo_effetivo")
     private int tempoEffettivo;//in minuti
-    @OneToOne(mappedBy = "mezzi")
-    private Mezzo idMezzo;
+    @OneToOne
+    @JoinColumn(name = "id_mezzo", referencedColumnName = "id", nullable = false, unique = true)
+    private Mezzo mezzo;
     @ManyToOne
     @JoinColumn(name = "tratta", nullable = false)
     private Tratta idTratta;
 
     public Percorrenza(){}
 
-    public Percorrenza(int tempoPrevisto, int tempoEffettivo, Mezzo idMezzo, Tratta idTratta) {
+    public Percorrenza(int tempoPrevisto, int tempoEffettivo, Mezzo mezzo, Tratta idTratta) {
         this.tempoPrevisto = tempoPrevisto;
         this.tempoEffettivo = tempoEffettivo;
-        this.idMezzo = idMezzo;
+        this.mezzo = mezzo;
         this.idTratta = idTratta;
     }
 
@@ -51,11 +52,11 @@ public class Percorrenza {
     }
 
     public Mezzo getIdMezzo() {
-        return idMezzo;
+        return mezzo;
     }
 
-    public void setIdMezzo(Mezzo idMezzo) {
-        this.idMezzo = idMezzo;
+    public void setIdMezzo(Mezzo mezzo) {
+        this.mezzo = mezzo;
     }
 
     public Tratta getIdTratta() {
@@ -72,7 +73,7 @@ public class Percorrenza {
                 "id=" + id +
                 ", tempoPrevisto=" + tempoPrevisto +
                 ", tempoEffettivo=" + tempoEffettivo +
-                ", idMezzo=" + idMezzo +
+                ", idMezzo=" + mezzo +
                 ", idTratta=" + idTratta +
                 '}';
     }
