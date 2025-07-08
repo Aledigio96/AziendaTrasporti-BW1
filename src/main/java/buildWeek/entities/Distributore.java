@@ -13,14 +13,12 @@ public abstract class Distributore {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @ManyToOne
-    @JoinColumn(name = "zona_partenza", referencedColumnName = "zonaPartenza", nullable = false)
-    private Tratta posizione;
+    private String posizione;
 
     public Distributore() {
     }
 
-    public Distributore(Tratta posizione) {
+    public Distributore(String posizione) {
         this.posizione = posizione;
     }
 
@@ -28,11 +26,19 @@ public abstract class Distributore {
         return id;
     }
 
-    public Tratta getPosizione() {
+    public String getPosizione() {
         return posizione;
     }
 
-    public void setPosizione(Tratta posizione) {
+    public void setPosizione(String posizione) {
         this.posizione = posizione;
+    }
+
+    @Override
+    public String toString() {
+        return "Distributore{" +
+                "id=" + id +
+                ", posizione='" + posizione + '\'' +
+                '}';
     }
 }

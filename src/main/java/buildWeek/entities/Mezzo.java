@@ -19,16 +19,15 @@ public class Mezzo {
 
     private int capienza;
 
-    @Column(name = "in_servizio")
-    private boolean inServizio;
+
 
     // Costruttori
     public Mezzo() {}
 
-    public Mezzo(TipoMezzo tipo, int capienza, boolean inServizio) {
+    public Mezzo(TipoMezzo tipo, int capienza) {
         this.tipo = tipo;
         this.capienza = capienza;
-        this.inServizio = inServizio;
+
     }
 
     // Getters
@@ -44,9 +43,7 @@ public class Mezzo {
         return capienza;
     }
 
-    public boolean isInServizio() {
-        return inServizio;
-    }
+
 
     // Setters
     public void setTipo(TipoMezzo tipo) {
@@ -57,9 +54,7 @@ public class Mezzo {
         this.capienza = capienza;
     }
 
-    public void setInServizio(boolean inServizio) {
-        this.inServizio = inServizio;
-    }
+
 
     @Override
     public String toString() {
@@ -67,7 +62,6 @@ public class Mezzo {
                 "id=" + id +
                 ", tipo=" + tipo +
                 ", capienza=" + capienza +
-                ", inServizio=" + inServizio +
                 '}';
     }
 }

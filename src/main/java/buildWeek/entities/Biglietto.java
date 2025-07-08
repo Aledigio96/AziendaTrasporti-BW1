@@ -12,9 +12,7 @@ public class Biglietto {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private LocalDate dataemissione;
-    @ManyToOne
-    @JoinColumn(name = "distrubutori_id", nullable = false, unique = true)
-    private Distributore distributore;
+    private LocalDate scadenza;
     private boolean validazione;
     private LocalDate orariovalidazione;
     @ManyToOne
@@ -23,13 +21,13 @@ public class Biglietto {
 
     public Biglietto(){}
 
-    public Biglietto( LocalDate dataemissione, Distributore distributore, boolean validazione, LocalDate orariovalidazione, Mezzo idmezzo) {
+    public Biglietto( LocalDate dataemissione, boolean validazione, LocalDate orariovalidazione, Mezzo idmezzo) {
 
         this.dataemissione = dataemissione;
-        this.distributore = distributore;
         this.validazione = validazione;
         this.orariovalidazione = orariovalidazione;
         this.idmezzo = idmezzo;
+        this.scadenza=dataemissione.plusYears(1);
     }
 
     public UUID getId() {
@@ -44,14 +42,6 @@ public class Biglietto {
 
     public void setDataemissione(LocalDate dataemissione) {
         this.dataemissione = dataemissione;
-    }
-
-    public Distributore getDistributore() {
-        return distributore;
-    }
-
-    public void setDistributore(Distributore distributore) {
-        this.distributore = distributore;
     }
 
     public boolean isValidazione() {
@@ -78,12 +68,20 @@ public class Biglietto {
         this.idmezzo = idmezzo;
     }
 
+    public LocalDate getScadenza() {
+        return scadenza;
+    }
+
+    public void setScadenza(LocalDate scadenza) {
+        this.scadenza = scadenza;
+    }
+
     @Override
     public String toString() {
         return "Biglietto{" +
                 "id=" + id +
                 ", dataemissione=" + dataemissione +
-                ", distributore=" + distributore +
+                ", scadenza=" + scadenza +
                 ", validazione=" + validazione +
                 ", orariovalidazione=" + orariovalidazione +
                 ", idmezzo=" + idmezzo +

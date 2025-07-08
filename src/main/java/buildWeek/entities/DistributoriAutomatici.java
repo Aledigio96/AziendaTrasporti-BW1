@@ -2,19 +2,20 @@ package buildWeek.entities;
 
 import buildWeek.enums.StatoDistributoreAutomatico;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "distributori_automatici")
 public class DistributoriAutomatici extends Distributore {
-
+    @Enumerated
     private StatoDistributoreAutomatico stato;
 
     public DistributoriAutomatici() {
         super();
     }
 
-    public DistributoriAutomatici(Tratta posizione, StatoDistributoreAutomatico stato) {
+    public DistributoriAutomatici(String posizione, StatoDistributoreAutomatico stato) {
         super(posizione);
         this.stato = stato;
     }
@@ -26,6 +27,5 @@ public class DistributoriAutomatici extends Distributore {
     public void setStato(StatoDistributoreAutomatico stato) {
         this.stato = stato;
     }
-
 
 }

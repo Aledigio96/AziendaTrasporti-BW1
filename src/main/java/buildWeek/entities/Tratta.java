@@ -19,20 +19,13 @@ public class Tratta {
     @Column(nullable = false)
     private String capolinea;
 
-    @Column(name = "tempo_previsto", nullable = false)
-    private int tempoPrevisto; //in minuti
-
-    @ManyToOne
-    @JoinColumn(name = "mezzo", nullable = false)
-    private Mezzo mezzo;
 
     public Tratta(){}
 
-    public Tratta(String zonaPartenza, String capolinea, int tempoPrevisto, Mezzo mezzo) {
+    public Tratta(String zonaPartenza, String capolinea) {
         this.zonaPartenza = zonaPartenza;
         this.capolinea = capolinea;
-        this.tempoPrevisto = tempoPrevisto;
-        this.mezzo = mezzo;
+
     }
 
     public UUID getId() {
@@ -55,19 +48,12 @@ public class Tratta {
         this.capolinea = capolinea;
     }
 
-    public int getTempoPrevisto() {
-        return tempoPrevisto;
-    }
-
-    public void setTempoPrevisto(int tempoPrevisto) {
-        this.tempoPrevisto = tempoPrevisto;
-    }
-
-    public Mezzo getMezzo() {
-        return mezzo;
-    }
-
-    public void setMezzo(Mezzo mezzo) {
-        this.mezzo = mezzo;
+    @Override
+    public String toString() {
+        return "Tratta{" +
+                "id=" + id +
+                ", zonaPartenza='" + zonaPartenza + '\'' +
+                ", capolinea='" + capolinea + '\'' +
+                '}';
     }
 }

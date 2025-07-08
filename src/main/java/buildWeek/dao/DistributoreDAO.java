@@ -1,7 +1,6 @@
 package buildWeek.dao;
 
 import buildWeek.entities.*;
-import buildWeek.enums.TipoAbbonamento;
 import buildWeek.exceptions.NotFoundException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
@@ -51,14 +50,13 @@ public class DistributoreDAO {
 
 
     //Emissione biglietto
-    public Biglietto emettiBiglietto(Distributore distributore, Mezzo mezzo) {
+    public Biglietto emettiBiglietto( Mezzo mezzo) {
         EntityTransaction tx = entityManager.getTransaction();
         try {
             tx.begin();
 
             Biglietto biglietto = new Biglietto();
             biglietto.setDataemissione(LocalDate.now());
-            biglietto.setDistributore(distributore);
             biglietto.setValidazione(false);
             biglietto.setIdmezzo(mezzo);
 
@@ -72,32 +70,5 @@ public class DistributoreDAO {
             throw new RuntimeException("Errore durante l'emissione del biglietto", e);
         }
     }
-
-
-    //Emissione abbonamento
-    public Abbonamento emettiAbbonamento(TipoAbbonamento tipo, Tessera tessera) {
-        EntityTransaction tx = entityManager.getTransaction();
-        try {
-            tx.begin();
-
-            LocalDate oggi = LocalDate.now();
-            LocalDate scadenza;
-
-            switch (tipo) {
-                case SETTIMANALE -> scadenza = oggi.plusWeeks(1);
-                case MENSILE -> scadenza = oggi.plusMonths(1);
-                default -> throw new IllegalArgumentException("Tipo abbonamento non valido");
-            }
-
-            Abbonamento abbonamento = new Abbonamento(tipo, oggi, scadenza, tessera);
-            entityManager.persist(abbonamento);
-
-            tx.commit();
-            System.out.println("Abbonamento emesso con successo.");
-            return abbonamento;
-        } catch (Exception e) {
-            if (tx.isActive()) tx.rollback();
-            throw new RuntimeException("Errore durante l'emissione dell'abbonamento", e);
-        }
-    }
+    
 }

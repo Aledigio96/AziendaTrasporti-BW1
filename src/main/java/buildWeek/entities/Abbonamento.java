@@ -1,6 +1,5 @@
 package buildWeek.entities;
 
-import buildWeek.enums.TipoAbbonamento;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -15,8 +14,6 @@ public class Abbonamento {
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
 
-    @Enumerated(EnumType.STRING)
-    private TipoAbbonamento tipo;
 
     @Column(name = "data_emissione")
     private LocalDate dataEmissione;
@@ -35,8 +32,8 @@ public class Abbonamento {
 
     public Abbonamento() {}
 
-    public Abbonamento(TipoAbbonamento tipo, LocalDate dataEmissione, LocalDate dataScadenza, Tessera tessera) {
-        this.tipo = tipo;
+    public Abbonamento( LocalDate dataEmissione, LocalDate dataScadenza, Tessera tessera) {
+
         this.dataEmissione = dataEmissione;
         this.dataScadenza = dataScadenza;
         this.tessera = tessera;
@@ -47,9 +44,6 @@ public class Abbonamento {
         return id;
     }
 
-    public TipoAbbonamento getTipo() {
-        return tipo;
-    }
 
     public LocalDate getDataEmissione() {
         return dataEmissione;
@@ -64,9 +58,6 @@ public class Abbonamento {
     }
 
     // Setters
-    public void setTipo(TipoAbbonamento tipo) {
-        this.tipo = tipo;
-    }
 
     public void setDataEmissione(LocalDate dataEmissione) {
         this.dataEmissione = dataEmissione;
@@ -84,7 +75,6 @@ public class Abbonamento {
     public String toString() {
         return "Abbonamento{" +
                 "id=" + id +
-                ", tipo=" + tipo +
                 ", dataEmissione=" + dataEmissione +
                 ", dataScadenza=" + dataScadenza +
                 ", tesseraId=" + (tessera != null ? tessera.getId() : null) +

@@ -20,7 +20,7 @@ public class Tessera {
     @Column(name = "data_scadenza")
     private LocalDate dataScadenza;
 
-    private boolean attiva;
+
 
     @OneToOne
     @JoinColumn(name = "utente_id", nullable = false, unique = true)
@@ -28,10 +28,10 @@ public class Tessera {
 
     public Tessera() {}
 
-    public Tessera(LocalDate dataEmissione, LocalDate dataScadenza, boolean attiva, Utente utente) {
+    public Tessera(LocalDate dataEmissione, LocalDate dataScadenza,  Utente utente) {
         this.dataEmissione = dataEmissione;
         this.dataScadenza = dataScadenza;
-        this.attiva = attiva;
+
         this.utente = utente;
     }
 
@@ -48,9 +48,6 @@ public class Tessera {
         return dataScadenza;
     }
 
-    public boolean isAttiva() {
-        return attiva;
-    }
 
     public Utente getUtente() {
         return utente;
@@ -65,9 +62,6 @@ public class Tessera {
         this.dataScadenza = dataScadenza;
     }
 
-    public void setAttiva(boolean attiva) {
-        this.attiva = attiva;
-    }
 
     public void setUtente(Utente utente) {
         this.utente = utente;
@@ -79,7 +73,6 @@ public class Tessera {
                 "id=" + id +
                 ", dataEmissione=" + dataEmissione +
                 ", dataScadenza=" + dataScadenza +
-                ", attiva=" + attiva +
                 ", utente=" + utente +
                 '}';
     }
