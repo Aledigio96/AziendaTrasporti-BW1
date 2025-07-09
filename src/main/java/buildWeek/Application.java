@@ -122,7 +122,31 @@ public class Application {
                         }
                         break;
                     case 5:
-                        System.out.println("Lista Abbonamenti:");
+                        System.out.println("---------- Gestione Abbonamenti ----------");
+                        System.out.println("1. Visualizza tutti gli abbonamenti");
+                        System.out.println("2. Visualizza abbonamenti in un intervallo di tempo");
+                        System.out.println("3. Visualizza abbonamenti emessi da uno specifico distributore");
+                        int sceltaAbbonamenti = scanner.nextInt();
+                        scanner.nextLine();
+                        switch (sceltaAbbonamenti) {
+                            case 1:
+                                ad.findAll();
+                                break;
+                            case 2:
+                                System.out.print("Data inizio (yyyy-mm-dd): ");
+                                LocalDate inizio = LocalDate.parse(scanner.nextLine());
+                                System.out.print("Data fine (yyyy-mm-dd): ");
+                                LocalDate fine = LocalDate.parse(scanner.nextLine());
+                                ad.findByPeriodo(inizio, fine);
+                                break;
+                            case 3:
+                                System.out.print("ID distributore: ");
+                                String idDistributore = scanner.nextLine();
+                                ad.findByDistributore(UUID.fromString(idDistributore));
+                                break;
+                            default:
+                                System.out.println("Scelta non valida.");
+                        }
                         break;
                     default:
                         System.out.println("Scelta non valida.");

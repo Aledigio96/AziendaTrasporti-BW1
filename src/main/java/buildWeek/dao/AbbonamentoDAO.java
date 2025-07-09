@@ -49,6 +49,7 @@ public class AbbonamentoDAO {
 
         System.out.println( "Abbonamento cancellato con successo!");
     }
+
     public boolean abbonamentoValidoOscaduto(String id) {
         Abbonamento abbonamento = findById(id);
         LocalDate oggi= LocalDate.now();
@@ -61,5 +62,27 @@ public class AbbonamentoDAO {
             System.out.println("L'abbonamento è scaduto");
             return false;
         }
+    }
+
+    public void findAll() {
+        var abbonamenti = entityManager.createQuery("SELECT a FROM Abbonamento a", Abbonamento.class).getResultList();
+        abbonamenti.forEach(System.out::println);
+    }
+
+    public void findByPeriodo(LocalDate inizio, LocalDate fine) {
+        var abbonamenti = entityManager.createQuery(
+                        "SELECT a FROM Abbonamento a WHERE a.dataEmissione BETWEEN :inizio AND :fine", Abbonamento.class)
+                .setParameter("inizio", inizio)
+                .setParameter("fine", fine)
+                .getResultList();
+        abbonamenti.forEach(System.out::println);
+    }
+
+    public void findByDistributore(UUID distributoreId) {
+        var abbonamenti = entityManager.createQuery(
+                        "SELECT a FROM Abbonamento a WHERE a.idDistributore.id = :id", Abbonamento.class)
+                .setParameter("id", distributoreId)
+                .getResultList();
+        abbonamenti.forEach(System.out::println);
     }
 }
