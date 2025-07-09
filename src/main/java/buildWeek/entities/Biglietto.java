@@ -15,9 +15,14 @@ public class Biglietto {
     private LocalDate scadenza;
     private boolean validazione;
     private LocalDate orariovalidazione;
+
     @ManyToOne
     @JoinColumn(name = "mezzo_id", nullable = false, unique = true)
     private Mezzo idmezzo;
+
+    @ManyToOne
+    @JoinColumn(name = "distributore_id",referencedColumnName = "id", nullable = false, unique = true)
+    private Distributore idDistributore;
 
     public Biglietto(){}
 

@@ -25,6 +25,10 @@ public class Abbonamento {
     @JoinColumn(name = "tessera_id", nullable = false)
     private Tessera tessera;
 
+    @ManyToOne
+    @JoinColumn(name = "distributore_id",referencedColumnName = "id", nullable = false, unique = true)
+    private Distributore idDistributore;
+
 
     public Abbonamento() {}
 
