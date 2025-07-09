@@ -6,7 +6,6 @@ import buildWeek.exceptions.NoResultException;
 import buildWeek.exceptions.NotFoundException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.NoResultException;
 import jakarta.persistence.Query;
 
 import java.util.List;
