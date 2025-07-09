@@ -2,6 +2,7 @@ package buildWeek.entities;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -16,10 +17,10 @@ public class Abbonamento {
 
 
     @Column(name = "data_emissione")
-    private LocalDateTime dataEmissione;
+    private LocalDate dataEmissione;
 
     @Column(name = "data_scadenza")
-    private LocalDateTime dataScadenza;
+    private LocalDate dataScadenza;
 
     @ManyToOne
     @JoinColumn(name = "tessera_id", nullable = false)
@@ -32,7 +33,7 @@ public class Abbonamento {
 
     public Abbonamento() {}
 
-    public Abbonamento( LocalDateTime dataEmissione, LocalDateTime dataScadenza, Tessera tessera) {
+    public Abbonamento( LocalDate dataEmissione, LocalDate dataScadenza, Tessera tessera) {
 
         this.dataEmissione = dataEmissione;
         this.dataScadenza = dataScadenza;
@@ -45,11 +46,11 @@ public class Abbonamento {
     }
 
 
-    public LocalDateTime getDataEmissione() {
+    public LocalDate getDataEmissione() {
         return dataEmissione;
     }
 
-    public LocalDateTime getDataScadenza() {
+    public LocalDate getDataScadenza() {
         return dataScadenza;
     }
 
@@ -59,11 +60,11 @@ public class Abbonamento {
 
     // Setters
 
-    public void setDataEmissione(LocalDateTime dataEmissione) {
+    public void setDataEmissione(LocalDate dataEmissione) {
         this.dataEmissione = dataEmissione;
     }
 
-    public void setDataScadenza(LocalDateTime dataScadenza) {
+    public void setDataScadenza(LocalDate dataScadenza) {
         this.dataScadenza = dataScadenza;
     }
 
