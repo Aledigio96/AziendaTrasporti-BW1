@@ -48,48 +48,68 @@ public class Application {
                 switch (scelta) {
                     case 1:
                         System.out.println("---------- Lista Utenti ----------");
-                        ud.findAll();
+                        try {
+                            ud.findAll();
+                        } catch (Exception e) {
+                            System.out.println("Errore durante il recupero degli utenti: " + e.getMessage());
+                        }
                         break;
                     case 2:
                         System.out.println("---------- Lista Tratte ----------");
-                        td.findAll();
+                        try {
+                            td.findAll();
+                        } catch (Exception e) {
+                            System.out.println("Errore durante il recupero delle tratte: " + e.getMessage());
+                        }
 
                         System.out.println("Vuoi aggiungere una nuova tratta? (s/n)");
                         String sceltaTratta = scanner.nextLine();
 
-                        if (sceltaTratta == "s"){
-                            System.out.print("Inserisci la zona di partenza: ");
-                            String zonaPartenza = scanner.nextLine();
-                            System.out.print("Inserisci la durata della tratta in minuti: ");
-                            int tempoPrevisto = scanner.nextInt();
-                            scanner.nextLine();
-                            System.out.print("Inserisci la zona di arrivo: ");
-                            String zonaArrivo = scanner.nextLine();
+                        if (sceltaTratta.equals("s")){
+                            try {
+                                System.out.print("Inserisci la zona di partenza: ");
+                                String zonaPartenza = scanner.nextLine();
+                                System.out.print("Inserisci la durata della tratta in minuti: ");
+                                int tempoPrevisto = scanner.nextInt();
+                                scanner.nextLine();
+                                System.out.print("Inserisci la zona di arrivo: ");
+                                String zonaArrivo = scanner.nextLine();
 
-                            Tratta nuovaTratta = new Tratta(zonaPartenza, tempoPrevisto, zonaArrivo);
-                            td.save(nuovaTratta);
-                            System.out.println("Nuova tratta aggiunta con successo: " + nuovaTratta);
+                                Tratta nuovaTratta = new Tratta(zonaPartenza, tempoPrevisto, zonaArrivo);
+                                td.save(nuovaTratta);
+                                System.out.println("Nuova tratta aggiunta con successo: " + nuovaTratta);
+                            } catch (Exception e) {
+                                System.out.println("Errore durante l'aggiunta della tratta: " + e.getMessage());
+                            }
                         } else{
                             System.out.println("Nessuna nuova tratta aggiunta.");
                         }
                         break;
                     case 3:
                         System.out.println("---------- Lista Mezzi ----------");
-                        md.findAll();
+                        try {
+                            md.findAll();
+                        } catch (Exception e) {
+                            System.out.println("Errore durante il recupero dei mezzi: " + e.getMessage());
+                        }
 
                         System.out.println("Vuoi aggiungere un nuovo mezzo? (s/n)");
                         String sceltaMezzo = scanner.nextLine();
-                        if (sceltaMezzo == "s") {
-                            System.out.print("Inserisci il tipo di mezzo (AUTOBUS/TRAM): ");
-                            String tipoMezzo = scanner.nextLine().toUpperCase();
-                            System.out.print("Inserisci la capienza del mezzo: ");
-                            int capienza = scanner.nextInt();
-                            scanner.nextLine();
+                        if (sceltaMezzo.equals("s")) {
+                            try {
+                                System.out.print("Inserisci il tipo di mezzo (AUTOBUS/TRAM): ");
+                                String tipoMezzo = scanner.nextLine().toUpperCase();
+                                System.out.print("Inserisci la capienza del mezzo: ");
+                                int capienza = scanner.nextInt();
+                                scanner.nextLine();
 
-                            TipoMezzo tipo = TipoMezzo.valueOf(tipoMezzo);
-                            Mezzo nuovoMezzo = new Mezzo(tipo, capienza);
-                            md.save(nuovoMezzo);
-                            System.out.println("Nuovo mezzo aggiunto con successo: " + nuovoMezzo);
+                                TipoMezzo tipo = TipoMezzo.valueOf(tipoMezzo);
+                                Mezzo nuovoMezzo = new Mezzo(tipo, capienza);
+                                md.save(nuovoMezzo);
+                                System.out.println("Nuovo mezzo aggiunto con successo: " + nuovoMezzo);
+                            } catch (Exception e) {
+                                System.out.println("Errore durante l'aggiunta del mezzo: " + e.getMessage());
+                            }
                         } else {
                             System.out.println("Nessun nuovo mezzo aggiunto.");
                         }
@@ -103,19 +123,31 @@ public class Application {
                         scanner.nextLine();
                         switch (sceltaBiglietti) {
                             case 1:
-                                bd.findAll();
+                                try {
+                                    bd.findAll();
+                                } catch (Exception e) {
+                                    System.out.println("Errore durante il recupero dei biglietti: " + e.getMessage());
+                                }
                                 break;
                             case 2:
-                                System.out.print("Data inizio (yyyy-mm-dd): ");
-                                LocalDate inizio = LocalDate.parse(scanner.nextLine());
-                                System.out.print("Data fine (yyyy-mm-dd): ");
-                                LocalDate fine = LocalDate.parse(scanner.nextLine());
-                                bd.findByPeriodo(inizio, fine);
+                                try {
+                                    System.out.print("Data inizio (yyyy-mm-dd): ");
+                                    LocalDate inizio = LocalDate.parse(scanner.nextLine());
+                                    System.out.print("Data fine (yyyy-mm-dd): ");
+                                    LocalDate fine = LocalDate.parse(scanner.nextLine());
+                                    bd.findByPeriodo(inizio, fine);
+                                } catch (Exception e) {
+                                    System.out.println("Errore durante la ricerca per periodo: " + e.getMessage());
+                                }
                                 break;
                             case 3:
-                                System.out.print("ID distributore: ");
-                                String idDistributore = scanner.nextLine();
-                                bd.findByDistributore(UUID.fromString(idDistributore));
+                                try {
+                                    System.out.print("ID distributore: ");
+                                    String idDistributore = scanner.nextLine();
+                                    bd.findByDistributore(UUID.fromString(idDistributore));
+                                } catch (Exception e) {
+                                    System.out.println("Errore durante la ricerca per distributore: " + e.getMessage());
+                                }
                                 break;
                             default:
                                 System.out.println("Scelta non valida.");
@@ -130,19 +162,31 @@ public class Application {
                         scanner.nextLine();
                         switch (sceltaAbbonamenti) {
                             case 1:
-                                ad.findAll();
+                                try {
+                                    ad.findAll();
+                                } catch (Exception e) {
+                                    System.out.println("Errore durante il recupero degli abbonamenti: " + e.getMessage());
+                                }
                                 break;
                             case 2:
-                                System.out.print("Data inizio (yyyy-mm-dd): ");
-                                LocalDate inizio = LocalDate.parse(scanner.nextLine());
-                                System.out.print("Data fine (yyyy-mm-dd): ");
-                                LocalDate fine = LocalDate.parse(scanner.nextLine());
-                                ad.findByPeriodo(inizio, fine);
+                                try {
+                                    System.out.print("Data inizio (yyyy-mm-dd): ");
+                                    LocalDate inizio = LocalDate.parse(scanner.nextLine());
+                                    System.out.print("Data fine (yyyy-mm-dd): ");
+                                    LocalDate fine = LocalDate.parse(scanner.nextLine());
+                                    ad.findByPeriodo(inizio, fine);
+                                } catch (Exception e) {
+                                    System.out.println("Errore durante la ricerca per periodo: " + e.getMessage());
+                                }
                                 break;
                             case 3:
-                                System.out.print("ID distributore: ");
-                                String idDistributore = scanner.nextLine();
-                                ad.findByDistributore(UUID.fromString(idDistributore));
+                                try {
+                                    System.out.print("ID distributore: ");
+                                    String idDistributore = scanner.nextLine();
+                                    ad.findByDistributore(UUID.fromString(idDistributore));
+                                } catch (Exception e) {
+                                    System.out.println("Errore durante la ricerca per distributore: " + e.getMessage());
+                                }
                                 break;
                             default:
                                 System.out.println("Scelta non valida.");
