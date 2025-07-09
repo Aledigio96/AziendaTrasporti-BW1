@@ -16,14 +16,19 @@ public class Tratta {
     @Column(name = "zonaPartenza", nullable = false, unique = true)
     private String zonaPartenza;
 
+
+    @Column(name = "tempo_previsto")
+    private int tempoPrevisto;//in minuti
+
     @Column(nullable = false)
     private String capolinea;
 
 
     public Tratta(){}
 
-    public Tratta(String zonaPartenza, String capolinea) {
+    public Tratta(String zonaPartenza, int tempoPrevisto, String capolinea) {
         this.zonaPartenza = zonaPartenza;
+        this.tempoPrevisto = tempoPrevisto;
         this.capolinea = capolinea;
 
     }
@@ -48,11 +53,20 @@ public class Tratta {
         this.capolinea = capolinea;
     }
 
+    public int getTempoPrevisto() {
+        return tempoPrevisto;
+    }
+
+    public void setTempoPrevisto(int tempoPrevisto) {
+        this.tempoPrevisto = tempoPrevisto;
+    }
+
     @Override
     public String toString() {
         return "Tratta{" +
                 "id=" + id +
                 ", zonaPartenza='" + zonaPartenza + '\'' +
+                ", tempoPrevisto=" + tempoPrevisto +
                 ", capolinea='" + capolinea + '\'' +
                 '}';
     }

@@ -10,11 +10,9 @@ public class Percorrenza {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    @Column(name = "tempo_previsto")
-    private int tempoPrevisto;//in minuti
     @Column(name = "tempo_effetivo")
     private int tempoEffettivo;//in minuti
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "id_mezzo", referencedColumnName = "id", nullable = false, unique = true)
     private Mezzo mezzo;
     @ManyToOne
@@ -23,8 +21,7 @@ public class Percorrenza {
 
     public Percorrenza(){}
 
-    public Percorrenza(int tempoPrevisto, int tempoEffettivo, Mezzo mezzo, Tratta idTratta) {
-        this.tempoPrevisto = tempoPrevisto;
+    public Percorrenza( int tempoEffettivo, Mezzo mezzo, Tratta idTratta) {
         this.tempoEffettivo = tempoEffettivo;
         this.mezzo = mezzo;
         this.idTratta = idTratta;
@@ -32,15 +29,6 @@ public class Percorrenza {
 
     public UUID getId() {
         return id;
-    }
-
-
-    public int getTempoPrevisto() {
-        return tempoPrevisto;
-    }
-
-    public void setTempoPrevisto(int tempoPrevisto) {
-        this.tempoPrevisto = tempoPrevisto;
     }
 
     public int getTempoEffettivo() {
@@ -71,7 +59,6 @@ public class Percorrenza {
     public String toString() {
         return "Percorrenze{" +
                 "id=" + id +
-                ", tempoPrevisto=" + tempoPrevisto +
                 ", tempoEffettivo=" + tempoEffettivo +
                 ", mezzo=" + mezzo +
                 ", idTratta=" + idTratta +

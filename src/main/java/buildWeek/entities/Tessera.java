@@ -2,7 +2,7 @@ package buildWeek.entities;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -15,10 +15,10 @@ public class Tessera {
     private UUID id;
 
     @Column(name = "data_emissione")
-    private LocalDate dataEmissione;
+    private LocalDateTime dataEmissione;
 
     @Column(name = "data_scadenza")
-    private LocalDate dataScadenza;
+    private LocalDateTime dataScadenza;
 
 
 
@@ -28,7 +28,7 @@ public class Tessera {
 
     public Tessera() {}
 
-    public Tessera(LocalDate dataEmissione, LocalDate dataScadenza,  Utente utente) {
+    public Tessera(LocalDateTime dataEmissione, LocalDateTime dataScadenza,  Utente utente) {
         this.dataEmissione = dataEmissione;
         this.dataScadenza = dataScadenza;
 
@@ -40,11 +40,11 @@ public class Tessera {
         return id;
     }
 
-    public LocalDate getDataEmissione() {
+    public LocalDateTime getDataEmissione() {
         return dataEmissione;
     }
 
-    public LocalDate getDataScadenza() {
+    public LocalDateTime getDataScadenza() {
         return dataScadenza;
     }
 
@@ -54,11 +54,11 @@ public class Tessera {
     }
 
     // Setter
-    public void setDataEmissione(LocalDate dataEmissione) {
+    public void setDataEmissione(LocalDateTime dataEmissione) {
         this.dataEmissione = dataEmissione;
     }
 
-    public void setDataScadenza(LocalDate dataScadenza) {
+    public void setDataScadenza(LocalDateTime dataScadenza) {
         this.dataScadenza = dataScadenza;
     }
 

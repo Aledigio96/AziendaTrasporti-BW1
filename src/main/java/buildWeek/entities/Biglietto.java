@@ -2,7 +2,7 @@ package buildWeek.entities;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -11,10 +11,10 @@ public class Biglietto {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    private LocalDate dataemissione;
-    private LocalDate scadenza;
+    private LocalDateTime dataemissione;
+    private LocalDateTime scadenza;
     private boolean validazione;
-    private LocalDate orariovalidazione;
+    private LocalDateTime orariovalidazione;
 
     @ManyToOne
     @JoinColumn(name = "mezzo_id", nullable = false, unique = true)
@@ -26,7 +26,7 @@ public class Biglietto {
 
     public Biglietto(){}
 
-    public Biglietto( LocalDate dataemissione, boolean validazione, LocalDate orariovalidazione, Mezzo idmezzo) {
+    public Biglietto( LocalDateTime dataemissione, boolean validazione, LocalDateTime orariovalidazione, Mezzo idmezzo) {
 
         this.dataemissione = dataemissione;
         this.validazione = validazione;
@@ -41,11 +41,11 @@ public class Biglietto {
 
 
 
-    public LocalDate getDataemissione() {
+    public LocalDateTime getDataemissione() {
         return dataemissione;
     }
 
-    public void setDataemissione(LocalDate dataemissione) {
+    public void setDataemissione(LocalDateTime dataemissione) {
         this.dataemissione = dataemissione;
     }
 
@@ -57,11 +57,11 @@ public class Biglietto {
         this.validazione = validazione;
     }
 
-    public LocalDate getOrariovalidazione() {
+    public LocalDateTime getOrariovalidazione() {
         return orariovalidazione;
     }
 
-    public void setOrariovalidazione(LocalDate orariovalidazione) {
+    public void setOrariovalidazione(LocalDateTime orariovalidazione) {
         this.orariovalidazione = orariovalidazione;
     }
 
@@ -73,11 +73,11 @@ public class Biglietto {
         this.idmezzo = idmezzo;
     }
 
-    public LocalDate getScadenza() {
+    public LocalDateTime getScadenza() {
         return scadenza;
     }
 
-    public void setScadenza(LocalDate scadenza) {
+    public void setScadenza(LocalDateTime scadenza) {
         this.scadenza = scadenza;
     }
 
