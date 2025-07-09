@@ -58,15 +58,20 @@ public class UtenteDAO {
         } catch (Exception e) {
             return null;
         }
-//        public List<Utente> findAll() {
-//            return (Utente) entityManager.createQuery("SELECT u FROM Utente u", Utente.class)
-//                    .getResultList();
-//        }
+    }
+
+
+
         public void findAll(){
             try { List<Utente> utenti= entityManager.createQuery("SELECT u FROM Utente u",Utente.class).getResultList();
                 for(Utente u: utenti){
                     System.out.println(u);
-        }
+                }
 
+            }catch (Exception e) {
+                System.out.println("Errore nel recupero degli utenti: " + e.getMessage());
+            } finally {
+                System.out.println("Tutti gli utenti sono stati recuperati con successo.");
+            }
         }
-        }}}
+}

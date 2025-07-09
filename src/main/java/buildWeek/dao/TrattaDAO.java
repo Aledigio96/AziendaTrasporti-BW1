@@ -2,12 +2,14 @@ package buildWeek.dao;
 
 import buildWeek.entities.Mezzo;
 import buildWeek.entities.Tratta;
+import buildWeek.entities.Utente;
 import buildWeek.exceptions.NotFoundException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.Query;
 
+import java.util.List;
 import java.util.UUID;
 
 public class TrattaDAO {
@@ -57,5 +59,18 @@ public class TrattaDAO {
         transaction.commit();
 
         System.out.println( "Tratta cancellato con successo!");
+    }
+
+    public void findAll(){
+        try { List<Tratta> tratte= entityManager.createQuery("SELECT t FROM Tratta t",Tratta.class).getResultList();
+            for(Tratta t: tratte){
+                System.out.println(t);
+            }
+
+        }catch (Exception e) {
+            System.out.println("Errore nel recupero delle tratte: " + e.getMessage());
+        } finally {
+            System.out.println("Tutte le tratte sono state recuperate con successo.");
+        }
     }
 }

@@ -41,40 +41,88 @@ public class Application {
                 System.out.println("1. Lista Utenti");
                 System.out.println("2. Lista Tratte");
                 System.out.println("3. Lista Mezzi");
-                System.out.println("4. Lista Biglietti");
+                System.out.println("4. Gestione Biglietti");
                 System.out.println("5. Lista Abbonamenti");
                 int scelta = scanner.nextInt();
                 scanner.nextLine();
                 switch (scelta) {
                     case 1:
-                        System.out.println("Lista Utenti:");
-                        for (Utente u : ud.findAll()) {
-                            System.out.println(u);
-                        }
+                        System.out.println("---------- Lista Utenti ----------");
+                        ud.findAll();
                         break;
                     case 2:
-                        System.out.println("Lista Tratte:");
-                        for (Tratta t : td.findAll()) {
-                            System.out.println(t);
+                        System.out.println("---------- Lista Tratte ----------");
+                        td.findAll();
+
+                        System.out.println("Vuoi aggiungere una nuova tratta? (s/n)");
+                        String sceltaTratta = scanner.nextLine();
+
+                        if (sceltaTratta == "s"){
+                            System.out.print("Inserisci la zona di partenza: ");
+                            String zonaPartenza = scanner.nextLine();
+                            System.out.print("Inserisci la durata della tratta in minuti: ");
+                            int tempoPrevisto = scanner.nextInt();
+                            scanner.nextLine();
+                            System.out.print("Inserisci la zona di arrivo: ");
+                            String zonaArrivo = scanner.nextLine();
+
+                            Tratta nuovaTratta = new Tratta(zonaPartenza, tempoPrevisto, zonaArrivo);
+                            td.save(nuovaTratta);
+                            System.out.println("Nuova tratta aggiunta con successo: " + nuovaTratta);
+                        } else{
+                            System.out.println("Nessuna nuova tratta aggiunta.");
                         }
                         break;
                     case 3:
-                        System.out.println("Lista Mezzi:");
-                        for (Mezzo m : md.findAll()) {
-                            System.out.println(m);
+                        System.out.println("---------- Lista Mezzi ----------");
+                        md.findAll();
+
+                        System.out.println("Vuoi aggiungere un nuovo mezzo? (s/n)");
+                        String sceltaMezzo = scanner.nextLine();
+                        if (sceltaMezzo == "s") {
+                            System.out.print("Inserisci il tipo di mezzo (AUTOBUS/TRAM): ");
+                            String tipoMezzo = scanner.nextLine().toUpperCase();
+                            System.out.print("Inserisci la capienza del mezzo: ");
+                            int capienza = scanner.nextInt();
+                            scanner.nextLine();
+
+                            TipoMezzo tipo = TipoMezzo.valueOf(tipoMezzo);
+                            Mezzo nuovoMezzo = new Mezzo(tipo, capienza);
+                            md.save(nuovoMezzo);
+                            System.out.println("Nuovo mezzo aggiunto con successo: " + nuovoMezzo);
+                        } else {
+                            System.out.println("Nessun nuovo mezzo aggiunto.");
                         }
                         break;
                     case 4:
-                        System.out.println("Lista Biglietti:");
-                        for (Biglietto b : bd.findAll()) {
-                            System.out.println(b);
+                        System.out.println("---------- Gestione Biglietti ----------");
+                        System.out.println("1. Visualizza tutti i biglietti");
+                        System.out.println("2. Visualizza biglietti in un intervallo di tempo");
+                        System.out.println("3. Visualizza biglietti emessi da uno specifico distributore");
+                        int sceltaBiglietti = scanner.nextInt();
+                        scanner.nextLine();
+                        switch (sceltaBiglietti) {
+                            case 1:
+                                bd.findAll();
+                                break;
+                            case 2:
+                                System.out.print("Data inizio (yyyy-mm-dd): ");
+                                LocalDate inizio = LocalDate.parse(scanner.nextLine());
+                                System.out.print("Data fine (yyyy-mm-dd): ");
+                                LocalDate fine = LocalDate.parse(scanner.nextLine());
+                                bd.findByPeriodo(inizio, fine);
+                                break;
+                            case 3:
+                                System.out.print("ID distributore: ");
+                                String idDistributore = scanner.nextLine();
+                                bd.findByDistributore(UUID.fromString(idDistributore));
+                                break;
+                            default:
+                                System.out.println("Scelta non valida.");
                         }
                         break;
                     case 5:
                         System.out.println("Lista Abbonamenti:");
-                        for (Abbonamento a : ad.findAll()) {
-                            System.out.println(a);
-                        }
                         break;
                     default:
                         System.out.println("Scelta non valida.");

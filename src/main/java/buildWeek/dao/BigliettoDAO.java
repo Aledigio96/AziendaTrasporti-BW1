@@ -80,4 +80,26 @@ public class BigliettoDAO {
             return false;
         }
     }
+
+    public void findAll() {
+        var biglietti = entityManager.createQuery("SELECT b FROM Biglietto b", Biglietto.class).getResultList();
+        biglietti.forEach(System.out::println);
+    }
+
+    public void findByPeriodo(LocalDate inizio, LocalDate fine) {
+        var biglietti = entityManager.createQuery(
+                        "SELECT b FROM Biglietto b WHERE b.dataemissione BETWEEN :inizio AND :fine", Biglietto.class)
+                .setParameter("inizio", inizio)
+                .setParameter("fine", fine)
+                .getResultList();
+        biglietti.forEach(System.out::println);
+    }
+
+    public void findByDistributore(UUID distributoreId) {
+        var biglietti = entityManager.createQuery(
+                        "SELECT b FROM Biglietto b WHERE b.distributore.id = :id", Biglietto.class)
+                .setParameter("id", distributoreId)
+                .getResultList();
+        biglietti.forEach(System.out::println);
+    }
 }
