@@ -153,7 +153,72 @@ public class Application {
                 }
             } else if (email.contains("@utente.com")) {
                 System.out.println("Accesso effettuato come UTENTE.");
-                // logica utente
+                System.out.println("Scegli un'operazione:");
+                System.out.println("1. Crea Biglietto");
+                System.out.println("2. Crea Abbonamento");
+                System.out.println("3. Visualizza tratte disponibili");
+                int sceltaUtente = scanner.nextInt();
+                scanner.nextLine();
+                switch (sceltaUtente) {
+                    case 1:
+                        System.out.println("Seleziona l'ID del distributore:");
+                        dd.findAll();
+                        String idDistributore = scanner.nextLine();
+                        System.out.println("Seleziona l'ID del mezzo:");
+                        md.findAll();
+                        String idMezzo = scanner.nextLine();
+                        Distributore distributore = dd.findById(String.valueOf(UUID.fromString(idDistributore)));
+                        Mezzo mezzo = md.findById(idMezzo);
+                         Biglietto biglietto = dd.emettiBiglietto(distributore, mezzo);
+                        System.out.println("Biglietto creato con successo: " + biglietto);
+                        break;
+                    case 2:
+                        //Chiedo il tipo di abbonamento (settimanale o mensile)
+                        System.out.println("Abbonamento settimanale o mensile? (s/m)");
+                        String tipoAbbonamento = scanner.nextLine();
+                        boolean abbonamentoScelto; // True se settimanale, False se mensile
+
+                        //Controllo la scelta dell'utente
+                        if( tipoAbbonamento.equalsIgnoreCase("s")) {
+                            abbonamentoScelto = true;
+                            System.out.println("Abbonamento settimanale selezionato.");
+                        } else if (tipoAbbonamento.equalsIgnoreCase("m")) {
+                            abbonamentoScelto = false;
+                            System.out.println("Abbonamento mensile selezionato.");
+                        } else {
+                            System.out.println("Scelta non valida. Riprova.");
+                            break;
+                        }
+
+                        //Chiedo l'ID del distributore
+                        System.out.println("Seleziona l'ID del distributore:");
+                        dd.findAll();
+                        String idDistributoreAbb = scanner.nextLine();
+
+                        //Trovo il distributore
+                        System.out.println("Seleziona l'ID della tessera:");
+                        Distributore distributoreAbb = dd.findById(String.valueOf(UUID.fromString(idDistributoreAbb)));
+
+                        //Controllo se l'utente ha una tessera
+                        Tessera tessera = tessd.findByUtenteId(utente.getId().toString());
+                        if (tessera == null) {
+                            System.out.println("Nessuna tessera trovata per questo utente.");
+                            break;
+                        }
+
+                        //Emetto l'abbonamento
+                        dd.emettiAbbonamento(distributoreAbb, tessera, abbonamentoScelto);
+                        System.out.println("Abbonamento creato con successo.");
+                        break;
+                        
+                    case 3:
+                        System.out.println("---------- Tratte disponibili ----------");
+                        td.findAll();
+                        break;
+                    default:
+                        System.out.println("Scelta non valida.");
+                }
+
             } else {
                 System.out.println("Ruolo non riconosciuto.");
             }

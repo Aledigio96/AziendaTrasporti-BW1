@@ -6,6 +6,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Query;
 
+import java.util.List;
 import java.util.UUID;
 
 public class TesseraDAO {
@@ -46,5 +47,29 @@ public class TesseraDAO {
         transaction.commit();
 
         System.out.println( "Tessera cancellata con successo!");
+    }
+
+    public void findAll(){
+        try { List<Tessera> tessere= entityManager.createQuery("SELECT t FROM Tessera t",Tessera.class).getResultList();
+            for(Tessera t: tessere){
+                System.out.println(t);
+            }
+
+        }catch (Exception e) {
+            System.out.println("Errore nel recupero degli tessere: " + e.getMessage());
+        } finally {
+            System.out.println("Tutti gli tessere sono stati recuperati con successo.");
+        }
+    }
+
+    public Tessera findByUtenteId(String utenteId) {
+        try {
+            return entityManager.createQuery(
+                            "SELECT t FROM Tessera t WHERE t.utente.id = :utenteId", Tessera.class)
+                    .setParameter("utenteId", UUID.fromString(utenteId))
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 }
