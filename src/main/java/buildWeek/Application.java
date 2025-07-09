@@ -275,8 +275,16 @@ public class Application {
                         //Controllo se l'utente ha una tessera
                         Tessera tessera = tessd.findByUtenteId(utente.getId().toString());
                         if (tessera == null) {
-                            System.out.println("Nessuna tessera trovata per questo utente.");
-                            break;
+                            System.out.println("Nessuna tessera trovata per questo utente. Vuoi crearne una? (s/n)");
+                            String creaTessera = scanner.nextLine();
+                            if (creaTessera.equalsIgnoreCase("s")) {
+                                tessera = new Tessera(LocalDate.now(), LocalDate.now().plusYears(1), utente);
+                                tessd.save(tessera);
+                                System.out.println("Tessera creata con successo: " + tessera);
+                            } else {
+                                System.out.println("Operazione annullata.");
+                                break;
+                            }
                         }
 
                         //Emetto l'abbonamento
