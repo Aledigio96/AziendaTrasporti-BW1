@@ -6,6 +6,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Query;
 
+import java.util.List;
 import java.util.UUID;
 
 public class UtenteDAO {
@@ -48,4 +49,24 @@ public class UtenteDAO {
 
         System.out.println( "Utente cancellato con successo!");
     }
-}
+    public Utente findByEmail(String email) {
+        try {
+            return entityManager.createQuery(
+                            "SELECT u FROM Utente u WHERE u.email = :email", Utente.class)
+                    .setParameter("email", email)
+                    .getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
+//        public List<Utente> findAll() {
+//            return (Utente) entityManager.createQuery("SELECT u FROM Utente u", Utente.class)
+//                    .getResultList();
+//        }
+        public void findAll(){
+            try { List<Utente> utenti= entityManager.createQuery("SELECT u FROM Utente u",Utente.class).getResultList();
+                for(Utente u: utenti){
+                    System.out.println(u);
+        }
+
+        }
+        }}}

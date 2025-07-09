@@ -9,6 +9,7 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
 import java.time.LocalDate;
+import java.util.Scanner;
 import java.util.UUID;
 
 public class Application {
@@ -24,19 +25,82 @@ public class Application {
         AbbonamentoDAO ad=new AbbonamentoDAO(em);
         ManutenzioneDAO mand= new ManutenzioneDAO(em);
         PercorrenzaDAO pd= new PercorrenzaDAO(em);
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Benvenuto! Identificati per entrare nella tua area riservata.");
+        System.out.print("Inserisci la tua email: ");
+        String email = scanner.nextLine();
+        System.out.print("Inserisci la tua password: ");
+        String password = scanner.nextLine();
+
+        Utente utente = ud.findByEmail(email);
+
+        if (utente != null && utente.getPassword().equals(password)) {
+            if (email.contains("@amministratore.com")) {
+                System.out.println("Accesso effettuato come AMMINISTRATORE.");
+                System.out.println("Scegli che operazione vuoi effettuare:");
+                System.out.println("1. Lista Utenti");
+                System.out.println("2. Lista Tratte");
+                System.out.println("3. Lista Mezzi");
+                System.out.println("4. Lista Biglietti");
+                System.out.println("5. Lista Abbonamenti");
+                int scelta = scanner.nextInt();
+                scanner.nextLine();
+                switch (scelta) {
+                    case 1:
+                        System.out.println("Lista Utenti:");
+                        for (Utente u : ud.findAll()) {
+                            System.out.println(u);
+                        }
+                        break;
+                    case 2:
+                        System.out.println("Lista Tratte:");
+                        for (Tratta t : td.findAll()) {
+                            System.out.println(t);
+                        }
+                        break;
+                    case 3:
+                        System.out.println("Lista Mezzi:");
+                        for (Mezzo m : md.findAll()) {
+                            System.out.println(m);
+                        }
+                        break;
+                    case 4:
+                        System.out.println("Lista Biglietti:");
+                        for (Biglietto b : bd.findAll()) {
+                            System.out.println(b);
+                        }
+                        break;
+                    case 5:
+                        System.out.println("Lista Abbonamenti:");
+                        for (Abbonamento a : ad.findAll()) {
+                            System.out.println(a);
+                        }
+                        break;
+                    default:
+                        System.out.println("Scelta non valida.");
+                }
+            } else if (email.contains("@utente.com")) {
+                System.out.println("Accesso effettuato come UTENTE.");
+                // logica utente
+            } else {
+                System.out.println("Ruolo non riconosciuto.");
+            }
+        } else {
+            System.out.println("Credenziali non valide.");
+        }
 
 //        Utente utente1= new Utente("Alessandro","Di Giovanni","alessandr.g@gmail.com","1234", LocalDate.now().minusYears(29));
 //        ud.save(utente1);
 //        Utente utente1fromdb = ud.findById("a644f18d-6188-4127-bf4d-db5196bd2940");
-        Utente utente2 = new Utente("Maria", "Rossi", "maria.rossi@gmail.com", "abcd", LocalDate.now().minusYears(25));
-        Utente utente3 = new Utente("Giovanni", "Bianchi", "giovanni.bianchi@gmail.com", "password", LocalDate.now().minusYears(34));
-        Utente utente4 = new Utente("Laura", "Verdi", "laura.verdi@gmail.com", "qwerty", LocalDate.now().minusYears(22));
-        Utente utente5 = new Utente("Marco", "Neri", "marco.neri@gmail.com", "9876", LocalDate.now().minusYears(30));
-        Utente utente6 = new Utente("Federica", "Gialli", "federica.gialli@gmail.com", "12345", LocalDate.now().minusYears(28));
-        Utente utente7 = new Utente("Luca", "Blu", "luca.blu@gmail.com", "password1", LocalDate.now().minusYears(35));
-        Utente utente8 = new Utente("Elena", "Perni", "elena.perni@gmail.com", "elena123", LocalDate.now().minusYears(31));
-        Utente utente9 = new Utente("Francesco", "Marroni", "francesco.marroni@gmail.com", "francesco99", LocalDate.now().minusYears(26));
-        Utente utente10 = new Utente("Giulia", "Rossi", "giulia.rossi@gmail.com", "giulia2023", LocalDate.now().minusYears(24));
+        Utente utente2 = new Utente("Maria", "Rossi", "maria.rossi@amministratore.com", "abcd", LocalDate.now().minusYears(25));
+        Utente utente3 = new Utente("Giovanni", "Bianchi", "giovanni.bianchi@utente.com", "password", LocalDate.now().minusYears(34));
+        Utente utente4 = new Utente("Laura", "Verdi", "laura.verdi@utente.com", "qwerty", LocalDate.now().minusYears(22));
+        Utente utente5 = new Utente("Marco", "Neri", "marco.neri@utente.com", "9876", LocalDate.now().minusYears(30));
+        Utente utente6 = new Utente("Federica", "Gialli", "federica.gialli@utente.com", "12345", LocalDate.now().minusYears(28));
+        Utente utente7 = new Utente("Luca", "Blu", "luca.blu@utente.com", "password1", LocalDate.now().minusYears(35));
+        Utente utente8 = new Utente("Elena", "Perni", "elena.perni@utente.com", "elena123", LocalDate.now().minusYears(31));
+        Utente utente9 = new Utente("Francesco", "Marroni", "francesco.marroni@amministratore.com", "francesco99", LocalDate.now().minusYears(26));
+        Utente utente10 = new Utente("Giulia", "Rossi", "giulia.rossi@utente.com", "giulia2023", LocalDate.now().minusYears(24));
 //        ud.save(utente2);
 //        ud.save(utente3);
 //        ud.save(utente4);
@@ -46,19 +110,19 @@ public class Application {
 //        ud.save(utente8);
 //        ud.save(utente9);
 //        ud.save(utente10);
-//
+
 //        Tratta tratta1= new Tratta("Roma","Latina");
-        Tratta tratta1fromdb= td.findById("8024c49b-ce4a-407c-9a71-c347918b0d99");
+  //      Tratta tratta1fromdb= td.findById("8024c49b-ce4a-407c-9a71-c347918b0d99");
 //        td.save(tratta1);
-        Tratta tratta2 = new Tratta("Frosinone", "Afragola");
-        Tratta tratta3 = new Tratta("Viterbo", "Rieti");
-        Tratta tratta4 = new Tratta("Civitavecchia", "Ostia");
-        Tratta tratta5 = new Tratta("Ciampino", "Frascati");
-        Tratta tratta6 = new Tratta("Albano Laziale", "Pomezia");
-        Tratta tratta7 = new Tratta("Cassi", "Anzio");
-        Tratta tratta8 = new Tratta("Velletri", "Ariccia");
-        Tratta tratta9 = new Tratta("Tivoli", "Guidonia");
-        Tratta tratta10 = new Tratta("Sora", "Monteporzio Catone");
+        Tratta tratta2 = new Tratta("Frosinone",120, "Afragola");
+        Tratta tratta3 = new Tratta("Viterbo",60, "Rieti");
+        Tratta tratta4 = new Tratta("Civitavecchia", 50,"Ostia");
+        Tratta tratta5 = new Tratta("Ciampino",40, "Frascati");
+        Tratta tratta6 = new Tratta("Albano Laziale",70, "Pomezia");
+        Tratta tratta7 = new Tratta("Cassi",80, "Anzio");
+        Tratta tratta8 = new Tratta("Velletri",120, "Ariccia");
+        Tratta tratta9 = new Tratta("Tivoli",20, "Guidonia");
+        Tratta tratta10 = new Tratta("Sora",120, "Monteporzio Catone");
 //        td.save(tratta2);
 //        td.save(tratta3);
 //        td.save(tratta4);
@@ -75,11 +139,11 @@ public class Application {
 //
 //        Mezzo mezzo1=new Mezzo(TipoMezzo.AUTOBUS,50);
 //        md.save(mezzo1);
-      Mezzo mezzo1fromdb = md.findById("575cba6f-16a4-48de-a025-17137cf6b7a6");
-        Mezzo mezzo2fromdb = md.findById("2a809425-78ed-4563-841a-e7c08c1baab1");
-        Mezzo mezzo3fromdb = md.findById("472c77c1-3c10-4315-96d7-6c07c73d49de");
-        Mezzo mezzo4fromdb = md.findById("575cba6f-16a4-48de-a025-17137cf6b7a6");
-        Mezzo mezzo5fromdb = md.findById("91361440-4e5f-49f5-8589-105149e4b6a7");
+//      Mezzo mezzo1fromdb = md.findById("575cba6f-16a4-48de-a025-17137cf6b7a6");
+//        Mezzo mezzo2fromdb = md.findById("2a809425-78ed-4563-841a-e7c08c1baab1");
+//        Mezzo mezzo3fromdb = md.findById("472c77c1-3c10-4315-96d7-6c07c73d49de");
+//        Mezzo mezzo4fromdb = md.findById("575cba6f-16a4-48de-a025-17137cf6b7a6");
+//        Mezzo mezzo5fromdb = md.findById("91361440-4e5f-49f5-8589-105149e4b6a7");
 //        Mezzo mezzo2 = new Mezzo(TipoMezzo.AUTOBUS, 60);
 //        Mezzo mezzo3 = new Mezzo(TipoMezzo.AUTOBUS, 70);
 //        Mezzo mezzo4 = new Mezzo(TipoMezzo.AUTOBUS, 80);
@@ -137,7 +201,7 @@ public class Application {
 
 //        dd.stampaConteggioEmissioni(LocalDate.of(2025, 7, 1), LocalDate.of(2025, 7, 8));
 
-
+scanner.close();
  emf.close();
  em.close();
     }
