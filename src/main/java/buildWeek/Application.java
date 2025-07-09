@@ -60,6 +60,7 @@ public class Application {
                 System.out.println("3. Lista Mezzi");
                 System.out.println("4. Gestione Biglietti");
                 System.out.println("5. Lista Abbonamenti");
+                System.out.println("6. Verifica numero manutenzioni per mezzo");
                 int scelta = scanner.nextInt();
                 scanner.nextLine();
 
@@ -210,6 +211,20 @@ public class Application {
                         }
 
                         break;
+
+                    case 6:
+                        // Verifica numero manutenzioni per mezzo
+                        System.out.println("---------- Verifica numero manutenzioni per mezzo ----------");
+                        md.findAll(); // Mostra tutti i mezzi
+
+                        System.out.print("Inserisci l'ID del mezzo: ");
+                        String idMezzoManutenzione = scanner.nextLine();
+                        Mezzo mezzoManutenzione = md.findById(idMezzoManutenzione);
+
+                        // Controllo se il mezzo esiste
+                        mand.countManutenzioniPerMezzo(mezzoManutenzione);
+                        break;
+
                     default:
                         System.out.println("Scelta non valida.");
                 }
