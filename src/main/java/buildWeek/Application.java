@@ -9,13 +9,17 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.Scanner;
 import java.util.UUID;
 
 public class Application {
     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("AziendaTrasporti");
     public static void main(String[] args) {
+
         EntityManager em = emf.createEntityManager();
+
+        //Presa dei DAO
         UtenteDAO ud= new UtenteDAO(em);
         TrattaDAO td= new TrattaDAO(em);
         TesseraDAO tessd= new TesseraDAO(em);
@@ -25,17 +29,30 @@ public class Application {
         AbbonamentoDAO ad=new AbbonamentoDAO(em);
         ManutenzioneDAO mand= new ManutenzioneDAO(em);
         PercorrenzaDAO pd= new PercorrenzaDAO(em);
+
         Scanner scanner = new Scanner(System.in);
+
+        //Inizializzazione del database
         System.out.println("Benvenuto! Identificati per entrare nella tua area riservata.");
+
+        //Richiesta email
         System.out.print("Inserisci la tua email: ");
         String email = scanner.nextLine();
+
+        //Richiesta password
         System.out.print("Inserisci la tua password: ");
         String password = scanner.nextLine();
 
+        //Controllo se l'utente esiste e se la password è corretta
         Utente utente = ud.findByEmail(email);
 
+        //Controllo se utente o amministratore
         if (utente != null && utente.getPassword().equals(password)) {
+
+            //AMMINISTRATORE
             if (email.contains("@amministratore.com")) {
+
+                //Menù Amministratore
                 System.out.println("Accesso effettuato come AMMINISTRATORE.");
                 System.out.println("Scegli che operazione vuoi effettuare:");
                 System.out.println("1. Lista Utenti");
@@ -45,159 +62,237 @@ public class Application {
                 System.out.println("5. Lista Abbonamenti");
                 int scelta = scanner.nextInt();
                 scanner.nextLine();
+
                 switch (scelta) {
                     case 1:
                         System.out.println("---------- Lista Utenti ----------");
-                        try {
-                            ud.findAll();
-                        } catch (Exception e) {
-                            System.out.println("Errore durante il recupero degli utenti: " + e.getMessage());
-                        }
+                        ud.findAll(); // Mostra tutti gli utenti
                         break;
                     case 2:
                         System.out.println("---------- Lista Tratte ----------");
-                        try {
-                            td.findAll();
-                        } catch (Exception e) {
-                            System.out.println("Errore durante il recupero delle tratte: " + e.getMessage());
-                        }
+                        td.findAll(); // Mostra tutte le tratte
 
+                        // Chiedo se l'amministratore vuole aggiungere una nuova tratta
                         System.out.println("Vuoi aggiungere una nuova tratta? (s/n)");
                         String sceltaTratta = scanner.nextLine();
 
-                        if (sceltaTratta.equals("s")){
-                            try {
-                                System.out.print("Inserisci la zona di partenza: ");
-                                String zonaPartenza = scanner.nextLine();
-                                System.out.print("Inserisci la durata della tratta in minuti: ");
-                                int tempoPrevisto = scanner.nextInt();
-                                scanner.nextLine();
-                                System.out.print("Inserisci la zona di arrivo: ");
-                                String zonaArrivo = scanner.nextLine();
+                        if (Objects.equals(sceltaTratta, "s")){
 
-                                Tratta nuovaTratta = new Tratta(zonaPartenza, tempoPrevisto, zonaArrivo);
-                                td.save(nuovaTratta);
-                                System.out.println("Nuova tratta aggiunta con successo: " + nuovaTratta);
-                            } catch (Exception e) {
-                                System.out.println("Errore durante l'aggiunta della tratta: " + e.getMessage());
-                            }
+                            // Chiedo i dettagli della nuova tratta
+                            System.out.print("Inserisci la zona di partenza: ");
+                            String zonaPartenza = scanner.nextLine();
+
+                            System.out.print("Inserisci la zona di arrivo: ");
+                            String zonaArrivo = scanner.nextLine();
+
+                            System.out.print("Inserisci la durata della tratta in minuti: ");
+                            int tempoPrevisto = scanner.nextInt();
+                            scanner.nextLine();
+
+                            // Crea e salva la nuova tratta
+                            Tratta nuovaTratta = new Tratta(zonaPartenza, tempoPrevisto, zonaArrivo);
+                            td.save(nuovaTratta);
+                            System.out.println("Nuova tratta aggiunta con successo: " + nuovaTratta);
+
                         } else{
                             System.out.println("Nessuna nuova tratta aggiunta.");
                         }
                         break;
+
                     case 3:
                         System.out.println("---------- Lista Mezzi ----------");
-                        try {
-                            md.findAll();
-                        } catch (Exception e) {
-                            System.out.println("Errore durante il recupero dei mezzi: " + e.getMessage());
-                        }
+                        md.findAll(); // Mostra tutti i mezzi
 
+                        // Chiedo se l'amministratore vuole aggiungere un nuovo mezzo
                         System.out.println("Vuoi aggiungere un nuovo mezzo? (s/n)");
                         String sceltaMezzo = scanner.nextLine();
-                        if (sceltaMezzo.equals("s")) {
-                            try {
-                                System.out.print("Inserisci il tipo di mezzo (AUTOBUS/TRAM): ");
-                                String tipoMezzo = scanner.nextLine().toUpperCase();
-                                System.out.print("Inserisci la capienza del mezzo: ");
-                                int capienza = scanner.nextInt();
-                                scanner.nextLine();
 
-                                TipoMezzo tipo = TipoMezzo.valueOf(tipoMezzo);
-                                Mezzo nuovoMezzo = new Mezzo(tipo, capienza);
-                                md.save(nuovoMezzo);
-                                System.out.println("Nuovo mezzo aggiunto con successo: " + nuovoMezzo);
-                            } catch (Exception e) {
-                                System.out.println("Errore durante l'aggiunta del mezzo: " + e.getMessage());
-                            }
+                        if (Objects.equals(sceltaMezzo, "s")) {
+
+                            // Chiedo i dettagli del nuovo mezzo
+                            System.out.print("Inserisci il tipo di mezzo (AUTOBUS/TRAM): ");
+                            String tipoMezzo = scanner.nextLine().toUpperCase();
+
+                            System.out.print("Inserisci la capienza del mezzo: ");
+                            int capienza = scanner.nextInt();
+                            scanner.nextLine();
+
+                            TipoMezzo tipo = TipoMezzo.valueOf(tipoMezzo);
+
+                            // Crea e salva il nuovo mezzo
+                            Mezzo nuovoMezzo = new Mezzo(tipo, capienza);
+                            md.save(nuovoMezzo);
+                            System.out.println("Nuovo mezzo aggiunto con successo: " + nuovoMezzo);
+
                         } else {
                             System.out.println("Nessun nuovo mezzo aggiunto.");
                         }
                         break;
+
                     case 4:
+                        // Gestione Biglietti
                         System.out.println("---------- Gestione Biglietti ----------");
                         System.out.println("1. Visualizza tutti i biglietti");
                         System.out.println("2. Visualizza biglietti in un intervallo di tempo");
                         System.out.println("3. Visualizza biglietti emessi da uno specifico distributore");
+
                         int sceltaBiglietti = scanner.nextInt();
                         scanner.nextLine();
+
                         switch (sceltaBiglietti) {
                             case 1:
-                                try {
-                                    bd.findAll();
-                                } catch (Exception e) {
-                                    System.out.println("Errore durante il recupero dei biglietti: " + e.getMessage());
-                                }
+                                bd.findAll(); // Mostra tutti i biglietti
                                 break;
+
                             case 2:
-                                try {
-                                    System.out.print("Data inizio (yyyy-mm-dd): ");
-                                    LocalDate inizio = LocalDate.parse(scanner.nextLine());
-                                    System.out.print("Data fine (yyyy-mm-dd): ");
-                                    LocalDate fine = LocalDate.parse(scanner.nextLine());
-                                    bd.findByPeriodo(inizio, fine);
-                                } catch (Exception e) {
-                                    System.out.println("Errore durante la ricerca per periodo: " + e.getMessage());
-                                }
+                                // Chiedo l'intervallo di date
+                                System.out.print("Data inizio (yyyy-mm-dd): ");
+                                LocalDate inizio = LocalDate.parse(scanner.nextLine());
+
+                                System.out.print("Data fine (yyyy-mm-dd): ");
+                                LocalDate fine = LocalDate.parse(scanner.nextLine());
+
+                                // Trovo i biglietti nell'intervallo
+                                bd.findByPeriodo(inizio, fine);
                                 break;
+
                             case 3:
-                                try {
-                                    System.out.print("ID distributore: ");
-                                    String idDistributore = scanner.nextLine();
-                                    bd.findByDistributore(UUID.fromString(idDistributore));
-                                } catch (Exception e) {
-                                    System.out.println("Errore durante la ricerca per distributore: " + e.getMessage());
-                                }
+                                // Chiedo l'ID del distributore
+                                System.out.print("ID distributore: ");
+                                String idDistributore = scanner.nextLine();
+
+                                // Trovo i biglietti emessi dal distributore
+                                bd.findByDistributore(UUID.fromString(idDistributore));
                                 break;
+
                             default:
                                 System.out.println("Scelta non valida.");
                         }
                         break;
+
                     case 5:
+                        // Gestione Abbonamenti
                         System.out.println("---------- Gestione Abbonamenti ----------");
                         System.out.println("1. Visualizza tutti gli abbonamenti");
                         System.out.println("2. Visualizza abbonamenti in un intervallo di tempo");
                         System.out.println("3. Visualizza abbonamenti emessi da uno specifico distributore");
+
                         int sceltaAbbonamenti = scanner.nextInt();
                         scanner.nextLine();
+
                         switch (sceltaAbbonamenti) {
                             case 1:
-                                try {
-                                    ad.findAll();
-                                } catch (Exception e) {
-                                    System.out.println("Errore durante il recupero degli abbonamenti: " + e.getMessage());
-                                }
+                                ad.findAll(); // Mostra tutti gli abbonamenti
                                 break;
                             case 2:
-                                try {
-                                    System.out.print("Data inizio (yyyy-mm-dd): ");
-                                    LocalDate inizio = LocalDate.parse(scanner.nextLine());
-                                    System.out.print("Data fine (yyyy-mm-dd): ");
-                                    LocalDate fine = LocalDate.parse(scanner.nextLine());
-                                    ad.findByPeriodo(inizio, fine);
-                                } catch (Exception e) {
-                                    System.out.println("Errore durante la ricerca per periodo: " + e.getMessage());
-                                }
+                                // Chiedo l'intervallo di date
+                                System.out.print("Data inizio (yyyy-mm-dd): ");
+                                LocalDate inizio = LocalDate.parse(scanner.nextLine());
+
+                                System.out.print("Data fine (yyyy-mm-dd): ");
+                                LocalDate fine = LocalDate.parse(scanner.nextLine());
+
+                                // Trovo gli abbonamenti nell'intervallo
+                                ad.findByPeriodo(inizio, fine);
                                 break;
+
                             case 3:
-                                try {
-                                    System.out.print("ID distributore: ");
-                                    String idDistributore = scanner.nextLine();
-                                    ad.findByDistributore(UUID.fromString(idDistributore));
-                                } catch (Exception e) {
-                                    System.out.println("Errore durante la ricerca per distributore: " + e.getMessage());
-                                }
+                                // Chiedo l'ID del distributore
+                                System.out.print("ID distributore: ");
+                                String idDistributore = scanner.nextLine();
+
+                                // Trovo gli abbonamenti emessi dal distributore
+                                ad.findByDistributore(UUID.fromString(idDistributore));
                                 break;
+
                             default:
                                 System.out.println("Scelta non valida.");
                         }
+
                         break;
                     default:
                         System.out.println("Scelta non valida.");
                 }
             } else if (email.contains("@utente.com")) {
+
+                //Menù utente
                 System.out.println("Accesso effettuato come UTENTE.");
-                // logica utente
+                System.out.println("Scegli un'operazione:");
+                System.out.println("1. Crea Biglietto");
+                System.out.println("2. Crea Abbonamento");
+                System.out.println("3. Visualizza tratte disponibili");
+                int sceltaUtente = scanner.nextInt();
+                scanner.nextLine();
+
+                switch (sceltaUtente) {
+                    case 1:
+                        //Chiedo l'ID del distributore
+                        System.out.println("Seleziona l'ID del distributore:");
+                        dd.findAll();
+                        String idDistributore = scanner.nextLine();
+
+                        //Controllo se il distributore esiste
+                        System.out.println("Seleziona l'ID del mezzo:");
+                        md.findAll();
+                        String idMezzo = scanner.nextLine();
+
+                        //Identifico distributore e mezzo
+                        Distributore distributore = dd.findById(String.valueOf(UUID.fromString(idDistributore)));
+                        Mezzo mezzo = md.findById(idMezzo);
+
+                        //Creazione del biglietto
+                        Biglietto biglietto = dd.emettiBiglietto(distributore, mezzo);
+                        System.out.println("Biglietto creato con successo: " + biglietto);
+                        break;
+
+                    case 2:
+                        //Chiedo il tipo di abbonamento (settimanale o mensile)
+                        System.out.println("Abbonamento settimanale o mensile? (s/m)");
+                        String tipoAbbonamento = scanner.nextLine();
+                        boolean abbonamentoScelto; // True se settimanale, False se mensile
+
+                        //Controllo la scelta dell'utente
+                        if( tipoAbbonamento.equalsIgnoreCase("s")) {
+                            abbonamentoScelto = true;
+                            System.out.println("Abbonamento settimanale selezionato.");
+                        } else if (tipoAbbonamento.equalsIgnoreCase("m")) {
+                            abbonamentoScelto = false;
+                            System.out.println("Abbonamento mensile selezionato.");
+                        } else {
+                            System.out.println("Scelta non valida. Riprova.");
+                            break;
+                        }
+
+                        //Chiedo l'ID del distributore
+                        System.out.println("Seleziona l'ID del distributore:");
+                        dd.findAll();
+                        String idDistributoreAbb = scanner.nextLine();
+
+                        //Trovo il distributore
+                        System.out.println("Seleziona l'ID della tessera:");
+                        Distributore distributoreAbb = dd.findById(String.valueOf(UUID.fromString(idDistributoreAbb)));
+
+                        //Controllo se l'utente ha una tessera
+                        Tessera tessera = tessd.findByUtenteId(utente.getId().toString());
+                        if (tessera == null) {
+                            System.out.println("Nessuna tessera trovata per questo utente.");
+                            break;
+                        }
+
+                        //Emetto l'abbonamento
+                        dd.emettiAbbonamento(distributoreAbb, tessera, abbonamentoScelto);
+                        System.out.println("Abbonamento creato con successo.");
+                        break;
+
+                    case 3:
+                        System.out.println("---------- Tratte disponibili ----------");
+                        td.findAll(); // Mostra tutte le tratte
+                        break;
+
+                    default:
+                        System.out.println("Scelta non valida.");
+                }
+
             } else {
                 System.out.println("Ruolo non riconosciuto.");
             }
@@ -205,18 +300,21 @@ public class Application {
             System.out.println("Credenziali non valide.");
         }
 
+        //UTENTI
 //        Utente utente1= new Utente("Alessandro","Di Giovanni","alessandr.g@gmail.com","1234", LocalDate.now().minusYears(29));
-//        ud.save(utente1);
+//        Utente utente2 = new Utente("Maria", "Rossi", "maria.rossi@amministratore.com", "abcd", LocalDate.now().minusYears(25));
+//        Utente utente3 = new Utente("Giovanni", "Bianchi", "giovanni.bianchi@utente.com", "password", LocalDate.now().minusYears(34));
+//        Utente utente4 = new Utente("Laura", "Verdi", "laura.verdi@utente.com", "qwerty", LocalDate.now().minusYears(22));
+//        Utente utente5 = new Utente("Marco", "Neri", "marco.neri@utente.com", "9876", LocalDate.now().minusYears(30));
+//        Utente utente6 = new Utente("Federica", "Gialli", "federica.gialli@utente.com", "12345", LocalDate.now().minusYears(28));
+//        Utente utente7 = new Utente("Luca", "Blu", "luca.blu@utente.com", "password1", LocalDate.now().minusYears(35));
+//        Utente utente8 = new Utente("Elena", "Perni", "elena.perni@utente.com", "elena123", LocalDate.now().minusYears(31));
+//        Utente utente9 = new Utente("Francesco", "Marroni", "francesco.marroni@amministratore.com", "francesco99", LocalDate.now().minusYears(26));
+//        Utente utente10 = new Utente("Giulia", "Rossi", "giulia.rossi@utente.com", "giulia2023", LocalDate.now().minusYears(24));
+
 //        Utente utente1fromdb = ud.findById("a644f18d-6188-4127-bf4d-db5196bd2940");
-        Utente utente2 = new Utente("Maria", "Rossi", "maria.rossi@amministratore.com", "abcd", LocalDate.now().minusYears(25));
-        Utente utente3 = new Utente("Giovanni", "Bianchi", "giovanni.bianchi@utente.com", "password", LocalDate.now().minusYears(34));
-        Utente utente4 = new Utente("Laura", "Verdi", "laura.verdi@utente.com", "qwerty", LocalDate.now().minusYears(22));
-        Utente utente5 = new Utente("Marco", "Neri", "marco.neri@utente.com", "9876", LocalDate.now().minusYears(30));
-        Utente utente6 = new Utente("Federica", "Gialli", "federica.gialli@utente.com", "12345", LocalDate.now().minusYears(28));
-        Utente utente7 = new Utente("Luca", "Blu", "luca.blu@utente.com", "password1", LocalDate.now().minusYears(35));
-        Utente utente8 = new Utente("Elena", "Perni", "elena.perni@utente.com", "elena123", LocalDate.now().minusYears(31));
-        Utente utente9 = new Utente("Francesco", "Marroni", "francesco.marroni@amministratore.com", "francesco99", LocalDate.now().minusYears(26));
-        Utente utente10 = new Utente("Giulia", "Rossi", "giulia.rossi@utente.com", "giulia2023", LocalDate.now().minusYears(24));
+
+//        ud.save(utente1);
 //        ud.save(utente2);
 //        ud.save(utente3);
 //        ud.save(utente4);
@@ -227,18 +325,22 @@ public class Application {
 //        ud.save(utente9);
 //        ud.save(utente10);
 
+
+        //TRATTE
 //        Tratta tratta1= new Tratta("Roma","Latina");
-  //      Tratta tratta1fromdb= td.findById("8024c49b-ce4a-407c-9a71-c347918b0d99");
+//        Tratta tratta2 = new Tratta("Frosinone",120, "Afragola");
+//        Tratta tratta3 = new Tratta("Viterbo",60, "Rieti");
+//        Tratta tratta4 = new Tratta("Civitavecchia", 50,"Ostia");
+//        Tratta tratta5 = new Tratta("Ciampino",40, "Frascati");
+//        Tratta tratta6 = new Tratta("Albano Laziale",70, "Pomezia");
+//        Tratta tratta7 = new Tratta("Cassi",80, "Anzio");
+//        Tratta tratta8 = new Tratta("Velletri",120, "Ariccia");
+//        Tratta tratta9 = new Tratta("Tivoli",20, "Guidonia");
+//        Tratta tratta10 = new Tratta("Sora",120, "Monteporzio Catone");
+
+//        Tratta tratta1fromdb= td.findById("8024c49b-ce4a-407c-9a71-c347918b0d99");
+
 //        td.save(tratta1);
-        Tratta tratta2 = new Tratta("Frosinone",120, "Afragola");
-        Tratta tratta3 = new Tratta("Viterbo",60, "Rieti");
-        Tratta tratta4 = new Tratta("Civitavecchia", 50,"Ostia");
-        Tratta tratta5 = new Tratta("Ciampino",40, "Frascati");
-        Tratta tratta6 = new Tratta("Albano Laziale",70, "Pomezia");
-        Tratta tratta7 = new Tratta("Cassi",80, "Anzio");
-        Tratta tratta8 = new Tratta("Velletri",120, "Ariccia");
-        Tratta tratta9 = new Tratta("Tivoli",20, "Guidonia");
-        Tratta tratta10 = new Tratta("Sora",120, "Monteporzio Catone");
 //        td.save(tratta2);
 //        td.save(tratta3);
 //        td.save(tratta4);
@@ -248,28 +350,35 @@ public class Application {
 //        td.save(tratta8);
 //        td.save(tratta9);
 //        td.save(tratta10);
-//
+
+
+        //TESSERE
 //        Tessera tessera1= new Tessera(LocalDate.now(),LocalDate.now().minusDays(30),utente1fromdb);
+
+//        Tessera tessera1fromdb = tessd.findById("09fe1c1b-9d10-4cbf-9fa6-bac85a0290f1");
+
 //        tessd.save(tessera1);
-    //    Tessera tessera1fromdb = tessd.findById("09fe1c1b-9d10-4cbf-9fa6-bac85a0290f1");
-//
-//        Mezzo mezzo1=new Mezzo(TipoMezzo.AUTOBUS,50);
-//        md.save(mezzo1);
-//      Mezzo mezzo1fromdb = md.findById("575cba6f-16a4-48de-a025-17137cf6b7a6");
-//        Mezzo mezzo2fromdb = md.findById("2a809425-78ed-4563-841a-e7c08c1baab1");
-//        Mezzo mezzo3fromdb = md.findById("472c77c1-3c10-4315-96d7-6c07c73d49de");
-//        Mezzo mezzo4fromdb = md.findById("575cba6f-16a4-48de-a025-17137cf6b7a6");
-//        Mezzo mezzo5fromdb = md.findById("91361440-4e5f-49f5-8589-105149e4b6a7");
+
+
+        //MEZZI
+//        Mezzo mezzo1 = new Mezzo(TipoMezzo.AUTOBUS, 50);
 //        Mezzo mezzo2 = new Mezzo(TipoMezzo.AUTOBUS, 60);
 //        Mezzo mezzo3 = new Mezzo(TipoMezzo.AUTOBUS, 70);
 //        Mezzo mezzo4 = new Mezzo(TipoMezzo.AUTOBUS, 80);
 //        Mezzo mezzo5 = new Mezzo(TipoMezzo.AUTOBUS, 90);
-//
 //        Mezzo mezzo6 = new Mezzo(TipoMezzo.TRAM, 100);
 //        Mezzo mezzo7 = new Mezzo(TipoMezzo.TRAM, 120);
 //        Mezzo mezzo8 = new Mezzo(TipoMezzo.TRAM, 150);
 //        Mezzo mezzo9 = new Mezzo(TipoMezzo.TRAM, 180);
 //        Mezzo mezzo10 = new Mezzo(TipoMezzo.TRAM, 200);
+
+//        Mezzo mezzo1fromdb = md.findById("575cba6f-16a4-48de-a025-17137cf6b7a6");
+//        Mezzo mezzo2fromdb = md.findById("2a809425-78ed-4563-841a-e7c08c1baab1");
+//        Mezzo mezzo3fromdb = md.findById("472c77c1-3c10-4315-96d7-6c07c73d49de");
+//        Mezzo mezzo4fromdb = md.findById("575cba6f-16a4-48de-a025-17137cf6b7a6");
+//        Mezzo mezzo5fromdb = md.findById("91361440-4e5f-49f5-8589-105149e4b6a7");
+
+//        md.save(mezzo1);
 //        md.save(mezzo2);
 //        md.save(mezzo3);
 //        md.save(mezzo4);
@@ -280,19 +389,23 @@ public class Application {
 //        md.save(mezzo9);
 //        md.save(mezzo10);
 
-//
+        //DISTRIBUTORI
 //        DistributoriAutomatici distributore1= new DistributoriAutomatici("Roma", StatoDistributoreAutomatico.INSERVIZIO);
 //        dd.save(distributore1);
-//
+
+        //BIGLIETTI
 //        Biglietto biglietto1=new Biglietto(LocalDate.now(),false,LocalDate.now().plusDays(1),mezzo1fromdb);
 //        bd.save(biglietto1);
 //        Biglietto biglietto1fromdb= bd.findById("1608a88d-7947-41c5-a624-7032f3a3c294");
-//
+
+        //ABBONAMENTI
 //        Abbonamento abbonamento1=new Abbonamento(LocalDate.now(),LocalDate.now().plusYears(1),tessera1fromdb);
-//        ad.save(abbonamento1);
 //        Abbonamento abbonamento2 = dd.emettiAbbonamento(tessera1fromdb, false);
 //        Abbonamento abbonamento3 = dd.emettiAbbonamento(tessera1fromdb, true);
 
+//        ad.save(abbonamento1);
+
+        //MANUTENZIONI
 //        Manutenzione manutenzione1=new Manutenzione(LocalDate.now(),LocalDate.now().minusDays(30),mezzo1fromdb);
 //        Manutenzione manutenzione1 = new Manutenzione(LocalDate.now(), LocalDate.now().minusDays(30), mezzo1fromdb);
 //        Manutenzione manutenzione2 = new Manutenzione(LocalDate.now().minusDays(5), LocalDate.now().minusDays(35), mezzo2fromdb);
@@ -306,16 +419,10 @@ public class Application {
 //        mand.save(manutenzione4);
 //        mand.save(manutenzione5);
 
-//        bd.validaBiglietto(UUID.fromString("1608a88d-7947-41c5-a624-7032f3a3c294"));
-//        mand.countManutenzioniPerMezzo(mezzo1fromdb);
-//        Abbonamento abbonamento1fromdb= ad.findById("c006d461-6fa0-4b98-82ed-3bdace728722");
-//        ad.abbonamentoValidoOscaduto("c006d461-6fa0-4b98-82ed-3bdace728722");
+        //PERCORRENZE
 //        Percorrenza percorrenza1= new Percorrenza(30,40,mezzo1fromdb,tratta1fromdb);
 //        pd.save(percorrenza1);
-        
 
-
-//        dd.stampaConteggioEmissioni(LocalDate.of(2025, 7, 1), LocalDate.of(2025, 7, 8));
 
 scanner.close();
  emf.close();

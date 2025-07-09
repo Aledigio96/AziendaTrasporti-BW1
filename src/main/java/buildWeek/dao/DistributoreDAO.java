@@ -7,6 +7,7 @@ import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Query;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 public class DistributoreDAO {
@@ -50,7 +51,7 @@ public class DistributoreDAO {
 
 
     //Emissione biglietto
-    public Biglietto emettiBiglietto( Mezzo mezzo) {
+    public Biglietto emettiBiglietto(Distributore distributore, Mezzo mezzo) {
         EntityTransaction tx = entityManager.getTransaction();
         try {
             tx.begin();
@@ -72,7 +73,7 @@ public class DistributoreDAO {
     }
 
     //Emissione abbonamento
-    public Abbonamento emettiAbbonamento(Tessera tessera, boolean settimanale) {
+    public Abbonamento emettiAbbonamento(Distributore distribuore, Tessera tessera, boolean settimanale) {
         EntityTransaction tx = entityManager.getTransaction();
         try {
             tx.begin();
@@ -120,5 +121,18 @@ public class DistributoreDAO {
         System.out.println("Dal " + inizio + " al " + fine + ":");
         System.out.println("Biglietti emessi: " + numeroBiglietti);
         System.out.println("Abbonamenti emessi: " + numeroAbbonamenti);
+    }
+
+    public void findAll() {
+        try {
+            List<Distributore> distributori = entityManager.createQuery("SELECT d FROM Distributore d", Distributore.class).getResultList();
+            for (Distributore d : distributori) {
+                System.out.println(d);
+            }
+        } catch (Exception e) {
+            System.out.println("Errore nel recupero dei distributori: " + e.getMessage());
+        } finally {
+            System.out.println("Tutti i distributori sono stati recuperati con successo.");
+        }
     }
 }
