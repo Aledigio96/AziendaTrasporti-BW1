@@ -1,5 +1,6 @@
 package buildWeek.dao;
 
+import buildWeek.entities.Abbonamento;
 import buildWeek.entities.Biglietto;
 import buildWeek.entities.Mezzo;
 import buildWeek.exceptions.NotFoundException;
@@ -7,6 +8,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Query;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 public class BigliettoDAO {
@@ -63,6 +65,19 @@ public class BigliettoDAO {
         } catch (Exception e) {
             if (transaction.isActive()) transaction.rollback();
             throw new RuntimeException("Errore durante la validazione del biglietto", e);
+        }
+    }
+    public boolean bigliettoValidoOscaduto(String id) {
+        Biglietto biglietto = findById(id);
+        LocalDate oggi= LocalDate.now();
+        if ((oggi.isEqual(biglietto.getDataemissione()))|| oggi.isAfter(biglietto.getDataemissione()) &&
+                (oggi.isEqual(biglietto.getScadenza()))|| oggi.isBefore(biglietto.getScadenza()))
+        {
+            System.out.println("Il biglietto è valido");
+            return true;
+        } else {
+            System.out.println("Il biglietto è scaduto");
+            return false;
         }
     }
 }
