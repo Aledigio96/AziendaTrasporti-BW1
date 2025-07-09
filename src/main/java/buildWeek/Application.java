@@ -9,13 +9,17 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.Scanner;
 import java.util.UUID;
 
 public class Application {
     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("AziendaTrasporti");
     public static void main(String[] args) {
+
         EntityManager em = emf.createEntityManager();
+
+        //Presa dei DAO
         UtenteDAO ud= new UtenteDAO(em);
         TrattaDAO td= new TrattaDAO(em);
         TesseraDAO tessd= new TesseraDAO(em);
@@ -25,17 +29,30 @@ public class Application {
         AbbonamentoDAO ad=new AbbonamentoDAO(em);
         ManutenzioneDAO mand= new ManutenzioneDAO(em);
         PercorrenzaDAO pd= new PercorrenzaDAO(em);
+
         Scanner scanner = new Scanner(System.in);
+
+        //Inizializzazione del database
         System.out.println("Benvenuto! Identificati per entrare nella tua area riservata.");
+
+        //Richiesta email
         System.out.print("Inserisci la tua email: ");
         String email = scanner.nextLine();
+
+        //Richiesta password
         System.out.print("Inserisci la tua password: ");
         String password = scanner.nextLine();
 
+        //Controllo se l'utente esiste e se la password è corretta
         Utente utente = ud.findByEmail(email);
 
+        //Controllo se utente o amministratore
         if (utente != null && utente.getPassword().equals(password)) {
+
+            //AMMINISTRATORE
             if (email.contains("@amministratore.com")) {
+
+                //Menù Amministratore
                 System.out.println("Accesso effettuato come AMMINISTRATORE.");
                 System.out.println("Scegli che operazione vuoi effettuare:");
                 System.out.println("1. Lista Utenti");
@@ -45,113 +62,160 @@ public class Application {
                 System.out.println("5. Lista Abbonamenti");
                 int scelta = scanner.nextInt();
                 scanner.nextLine();
+
                 switch (scelta) {
                     case 1:
                         System.out.println("---------- Lista Utenti ----------");
-                        ud.findAll();
+                        ud.findAll(); // Mostra tutti gli utenti
                         break;
                     case 2:
                         System.out.println("---------- Lista Tratte ----------");
-                        td.findAll();
+                        td.findAll(); // Mostra tutte le tratte
 
+                        // Chiedo se l'amministratore vuole aggiungere una nuova tratta
                         System.out.println("Vuoi aggiungere una nuova tratta? (s/n)");
                         String sceltaTratta = scanner.nextLine();
 
-                        if (sceltaTratta == "s"){
+                        if (Objects.equals(sceltaTratta, "s")){
+
+                            // Chiedo i dettagli della nuova tratta
                             System.out.print("Inserisci la zona di partenza: ");
                             String zonaPartenza = scanner.nextLine();
-                            System.out.print("Inserisci la durata della tratta in minuti: ");
-                            int tempoPrevisto = scanner.nextInt();
-                            scanner.nextLine();
+
                             System.out.print("Inserisci la zona di arrivo: ");
                             String zonaArrivo = scanner.nextLine();
 
+                            System.out.print("Inserisci la durata della tratta in minuti: ");
+                            int tempoPrevisto = scanner.nextInt();
+                            scanner.nextLine();
+
+                            // Crea e salva la nuova tratta
                             Tratta nuovaTratta = new Tratta(zonaPartenza, tempoPrevisto, zonaArrivo);
                             td.save(nuovaTratta);
                             System.out.println("Nuova tratta aggiunta con successo: " + nuovaTratta);
+
                         } else{
                             System.out.println("Nessuna nuova tratta aggiunta.");
                         }
                         break;
+
                     case 3:
                         System.out.println("---------- Lista Mezzi ----------");
-                        md.findAll();
+                        md.findAll(); // Mostra tutti i mezzi
 
+                        // Chiedo se l'amministratore vuole aggiungere un nuovo mezzo
                         System.out.println("Vuoi aggiungere un nuovo mezzo? (s/n)");
                         String sceltaMezzo = scanner.nextLine();
-                        if (sceltaMezzo == "s") {
+
+                        if (Objects.equals(sceltaMezzo, "s")) {
+
+                            // Chiedo i dettagli del nuovo mezzo
                             System.out.print("Inserisci il tipo di mezzo (AUTOBUS/TRAM): ");
                             String tipoMezzo = scanner.nextLine().toUpperCase();
+
                             System.out.print("Inserisci la capienza del mezzo: ");
                             int capienza = scanner.nextInt();
                             scanner.nextLine();
 
                             TipoMezzo tipo = TipoMezzo.valueOf(tipoMezzo);
+
+                            // Crea e salva il nuovo mezzo
                             Mezzo nuovoMezzo = new Mezzo(tipo, capienza);
                             md.save(nuovoMezzo);
                             System.out.println("Nuovo mezzo aggiunto con successo: " + nuovoMezzo);
+
                         } else {
                             System.out.println("Nessun nuovo mezzo aggiunto.");
                         }
                         break;
+
                     case 4:
+                        // Gestione Biglietti
                         System.out.println("---------- Gestione Biglietti ----------");
                         System.out.println("1. Visualizza tutti i biglietti");
                         System.out.println("2. Visualizza biglietti in un intervallo di tempo");
                         System.out.println("3. Visualizza biglietti emessi da uno specifico distributore");
+
                         int sceltaBiglietti = scanner.nextInt();
                         scanner.nextLine();
+
                         switch (sceltaBiglietti) {
                             case 1:
-                                bd.findAll();
+                                bd.findAll(); // Mostra tutti i biglietti
                                 break;
+
                             case 2:
+                                // Chiedo l'intervallo di date
                                 System.out.print("Data inizio (yyyy-mm-dd): ");
                                 LocalDate inizio = LocalDate.parse(scanner.nextLine());
+
                                 System.out.print("Data fine (yyyy-mm-dd): ");
                                 LocalDate fine = LocalDate.parse(scanner.nextLine());
+
+                                // Trovo i biglietti nell'intervallo
                                 bd.findByPeriodo(inizio, fine);
                                 break;
+
                             case 3:
+                                // Chiedo l'ID del distributore
                                 System.out.print("ID distributore: ");
                                 String idDistributore = scanner.nextLine();
+
+                                // Trovo i biglietti emessi dal distributore
                                 bd.findByDistributore(UUID.fromString(idDistributore));
                                 break;
+
                             default:
                                 System.out.println("Scelta non valida.");
                         }
                         break;
+
                     case 5:
+                        // Gestione Abbonamenti
                         System.out.println("---------- Gestione Abbonamenti ----------");
                         System.out.println("1. Visualizza tutti gli abbonamenti");
                         System.out.println("2. Visualizza abbonamenti in un intervallo di tempo");
                         System.out.println("3. Visualizza abbonamenti emessi da uno specifico distributore");
+
                         int sceltaAbbonamenti = scanner.nextInt();
                         scanner.nextLine();
+
                         switch (sceltaAbbonamenti) {
                             case 1:
-                                ad.findAll();
+                                ad.findAll(); // Mostra tutti gli abbonamenti
                                 break;
                             case 2:
+                                // Chiedo l'intervallo di date
                                 System.out.print("Data inizio (yyyy-mm-dd): ");
                                 LocalDate inizio = LocalDate.parse(scanner.nextLine());
+
                                 System.out.print("Data fine (yyyy-mm-dd): ");
                                 LocalDate fine = LocalDate.parse(scanner.nextLine());
+
+                                // Trovo gli abbonamenti nell'intervallo
                                 ad.findByPeriodo(inizio, fine);
                                 break;
+
                             case 3:
+                                // Chiedo l'ID del distributore
                                 System.out.print("ID distributore: ");
                                 String idDistributore = scanner.nextLine();
+
+                                // Trovo gli abbonamenti emessi dal distributore
                                 ad.findByDistributore(UUID.fromString(idDistributore));
                                 break;
+
                             default:
                                 System.out.println("Scelta non valida.");
                         }
+                        
                         break;
                     default:
                         System.out.println("Scelta non valida.");
                 }
             } else if (email.contains("@utente.com")) {
+
+                //Menù utente
                 System.out.println("Accesso effettuato come UTENTE.");
                 System.out.println("Scegli un'operazione:");
                 System.out.println("1. Crea Biglietto");
@@ -159,19 +223,28 @@ public class Application {
                 System.out.println("3. Visualizza tratte disponibili");
                 int sceltaUtente = scanner.nextInt();
                 scanner.nextLine();
+
                 switch (sceltaUtente) {
                     case 1:
+                        //Chiedo l'ID del distributore
                         System.out.println("Seleziona l'ID del distributore:");
                         dd.findAll();
                         String idDistributore = scanner.nextLine();
+
+                        //Controllo se il distributore esiste
                         System.out.println("Seleziona l'ID del mezzo:");
                         md.findAll();
                         String idMezzo = scanner.nextLine();
+
+                        //Identifico distributore e mezzo
                         Distributore distributore = dd.findById(String.valueOf(UUID.fromString(idDistributore)));
                         Mezzo mezzo = md.findById(idMezzo);
-                         Biglietto biglietto = dd.emettiBiglietto(distributore, mezzo);
+
+                        //Creazione del biglietto
+                        Biglietto biglietto = dd.emettiBiglietto(distributore, mezzo);
                         System.out.println("Biglietto creato con successo: " + biglietto);
                         break;
+
                     case 2:
                         //Chiedo il tipo di abbonamento (settimanale o mensile)
                         System.out.println("Abbonamento settimanale o mensile? (s/m)");
@@ -210,7 +283,7 @@ public class Application {
                         dd.emettiAbbonamento(distributoreAbb, tessera, abbonamentoScelto);
                         System.out.println("Abbonamento creato con successo.");
                         break;
-                        
+
                     case 3:
                         System.out.println("---------- Tratte disponibili ----------");
                         td.findAll();
