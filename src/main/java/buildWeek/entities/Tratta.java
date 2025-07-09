@@ -13,7 +13,7 @@ public class Tratta {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "zonaPartenza", nullable = false, unique = true)
+    @Column(name = "zonaPartenza", nullable = false)
     private String zonaPartenza;
 
 

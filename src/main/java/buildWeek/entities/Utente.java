@@ -99,7 +99,7 @@ public class Utente {
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", dataNascita=" + dataNascita +
-                ", tessera=" + tessera +
+                ", tesseraId=" + (tessera != null ? tessera.getId() : "null") +
                 '}';
     }
 }

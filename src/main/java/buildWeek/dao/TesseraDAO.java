@@ -1,6 +1,8 @@
 package buildWeek.dao;
 
 import buildWeek.entities.Tessera;
+
+import buildWeek.exceptions.NoResultException;
 import buildWeek.exceptions.NotFoundException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
