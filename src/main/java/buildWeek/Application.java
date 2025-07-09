@@ -35,314 +35,374 @@ public class Application {
         //Inizializzazione del database
         System.out.println("Benvenuto! Identificati per entrare nella tua area riservata.");
 
-        //Richiesta email
-        System.out.print("Inserisci la tua email: ");
-        String email = scanner.nextLine();
+        try {
+            //Richiesta email
+            System.out.print("Inserisci la tua email: ");
+            String email = scanner.nextLine();
 
-        //Richiesta password
-        System.out.print("Inserisci la tua password: ");
-        String password = scanner.nextLine();
+            //Richiesta password
+            System.out.print("Inserisci la tua password: ");
+            String password = scanner.nextLine();
 
-        //Controllo se l'utente esiste e se la password è corretta
-        Utente utente = ud.findByEmail(email);
-
-        //Controllo se utente o amministratore
-        if (utente != null && utente.getPassword().equals(password)) {
-
-            //AMMINISTRATORE
-            if (email.contains("@amministratore.com")) {
-                boolean anncycle= true;
-                System.out.println("Accesso effettuato come AMMINISTRATORE.");
-      while (anncycle){
-                //Menù Amministratore
-
-                System.out.println("Scegli che operazione vuoi effettuare:");
-                System.out.println("1. Lista Utenti");
-                System.out.println("2. Lista Tratte");
-                System.out.println("3. Lista Mezzi");
-                System.out.println("4. Gestione Biglietti");
-                System.out.println("5. Lista Abbonamenti");
-                System.out.println("6. Verifica numero manutenzioni per mezzo");
-                System.out.println("0. Esci dal programma");
-                int scelta = scanner.nextInt();
-                scanner.nextLine();
-
-                switch (scelta) {
-                    case 1:
-                        System.out.println("---------- Lista Utenti ----------");
-                        ud.findAll(); // Mostra tutti gli utenti
-                        break;
-                    case 2:
-                        System.out.println("---------- Lista Tratte ----------");
-                        td.findAll(); // Mostra tutte le tratte
-
-                        // Chiedo se l'amministratore vuole aggiungere una nuova tratta
-                        System.out.println("Vuoi aggiungere una nuova tratta? (s/n)");
-                        String sceltaTratta = scanner.nextLine();
-
-                        if (Objects.equals(sceltaTratta, "s")) {
-
-                            // Chiedo i dettagli della nuova tratta
-                            System.out.print("Inserisci la zona di partenza: ");
-                            String zonaPartenza = scanner.nextLine();
-
-                            System.out.print("Inserisci la zona di arrivo: ");
-                            String zonaArrivo = scanner.nextLine();
-
-                            System.out.print("Inserisci la durata della tratta in minuti: ");
-                            int tempoPrevisto = scanner.nextInt();
-                            scanner.nextLine();
-
-                            // Crea e salva la nuova tratta
-                            Tratta nuovaTratta = new Tratta(zonaPartenza, tempoPrevisto, zonaArrivo);
-                            td.save(nuovaTratta);
-                            System.out.println("Nuova tratta aggiunta con successo: " + nuovaTratta);
-
-                        } else {
-                            System.out.println("Nessuna nuova tratta aggiunta.");
-                        }
-                        break;
-
-                    case 3:
-                        System.out.println("---------- Lista Mezzi ----------");
-                        md.findAll(); // Mostra tutti i mezzi
-
-                        // Chiedo se l'amministratore vuole aggiungere un nuovo mezzo
-                        System.out.println("Vuoi aggiungere un nuovo mezzo? (s/n)");
-                        String sceltaMezzo = scanner.nextLine();
-
-                        if (Objects.equals(sceltaMezzo, "s")) {
-
-                            // Chiedo i dettagli del nuovo mezzo
-                            System.out.print("Inserisci il tipo di mezzo (AUTOBUS/TRAM): ");
-                            String tipoMezzo = scanner.nextLine().toUpperCase();
-
-                            System.out.print("Inserisci la capienza del mezzo: ");
-                            int capienza = scanner.nextInt();
-                            scanner.nextLine();
-
-                            TipoMezzo tipo = TipoMezzo.valueOf(tipoMezzo);
-
-                            // Crea e salva il nuovo mezzo
-                            Mezzo nuovoMezzo = new Mezzo(tipo, capienza);
-                            md.save(nuovoMezzo);
-                            System.out.println("Nuovo mezzo aggiunto con successo: " + nuovoMezzo);
-
-                        } else {
-                            System.out.println("Nessun nuovo mezzo aggiunto.");
-                        }
-                        break;
-
-                    case 4:
-                        boolean sceltabiglietti = true;
-                        while (sceltabiglietti) {
-                            // Gestione Biglietti
-
-                            System.out.println("---------- Gestione Biglietti ----------");
-                            System.out.println("1. Visualizza tutti i biglietti");
-                            System.out.println("2. Visualizza biglietti in un intervallo di tempo");
-                            System.out.println("3. Visualizza biglietti emessi da uno specifico distributore");
-                            System.out.println("0. Torna al menù principale");
-                            int sceltaBiglietti = scanner.nextInt();
-                            scanner.nextLine();
-
-                            switch (sceltaBiglietti) {
-                                case 1:
-                                    bd.findAll(); // Mostra tutti i biglietti
-                                    break;
-
-                                case 2:
-                                    // Chiedo l'intervallo di date
-                                    System.out.print("Data inizio (yyyy-mm-dd): ");
-                                    LocalDate inizio = LocalDate.parse(scanner.nextLine());
-
-                                    System.out.print("Data fine (yyyy-mm-dd): ");
-                                    LocalDate fine = LocalDate.parse(scanner.nextLine());
-
-                                    // Trovo i biglietti nell'intervallo
-                                    bd.findByPeriodo(inizio, fine);
-                                    break;
-
-                                case 3:
-                                    // Chiedo l'ID del distributore
-                                    System.out.print("ID distributore: ");
-                                    String idDistributore = scanner.nextLine();
-
-                                    // Trovo i biglietti emessi dal distributore
-                                    bd.findByDistributore(UUID.fromString(idDistributore));
-                                    break;
-                                case 0:
-                                    sceltabiglietti = false;
-                                    System.out.println("Tornando al menù principale...");
-                                    break;
-
-                                default:
-                                    System.out.println("Scelta non valida.");
-                            }
-                            break;
-                        }
-
-                    case 5:
-                        boolean sceltaAbbonamento = true;
-                        while (sceltaAbbonamento) {
-                            // Gestione Abbonamenti
-                            System.out.println("---------- Gestione Abbonamenti ----------");
-                            System.out.println("1. Visualizza tutti gli abbonamenti");
-                            System.out.println("2. Visualizza abbonamenti in un intervallo di tempo");
-                            System.out.println("3. Visualizza abbonamenti emessi da uno specifico distributore");
-                            System.out.println("0. Torna al menù principale");
-                            int sceltaAbbonamenti = scanner.nextInt();
-                            scanner.nextLine();
-
-                            switch (sceltaAbbonamenti) {
-                                case 1:
-                                    ad.findAll(); // Mostra tutti gli abbonamenti
-                                    break;
-                                case 2:
-                                    // Chiedo l'intervallo di date
-                                    System.out.print("Data inizio (yyyy-mm-dd): ");
-                                    LocalDate inizio = LocalDate.parse(scanner.nextLine());
-
-                                    System.out.print("Data fine (yyyy-mm-dd): ");
-                                    LocalDate fine = LocalDate.parse(scanner.nextLine());
-
-                                    // Trovo gli abbonamenti nell'intervallo
-                                    ad.findByPeriodo(inizio, fine);
-                                    break;
-
-                                case 3:
-                                    // Chiedo l'ID del distributore
-                                    System.out.print("ID distributore: ");
-                                    String idDistributore = scanner.nextLine();
-
-                                    // Trovo gli abbonamenti emessi dal distributore
-                                    ad.findByDistributore(UUID.fromString(idDistributore));
-                                    break;
-                                case 0:
-                                    sceltaAbbonamento = false;
-                                    System.out.println("Tornando al menù principale...");
-                                    break;
-
-                                default:
-                                    System.out.println("Scelta non valida.");
-                            }
-
-                        }    break;
-
-
-                    case 6:
-                        // Verifica numero manutenzioni per mezzo
-                        System.out.println("---------- Verifica numero manutenzioni per mezzo ----------");
-                        md.findAll(); // Mostra tutti i mezzi
-
-                        System.out.print("Inserisci l'ID del mezzo: ");
-                        String idMezzoManutenzione = scanner.nextLine();
-                        Mezzo mezzoManutenzione = md.findById(idMezzoManutenzione);
-
-                        // Controllo se il mezzo esiste
-                        mand.countManutenzioniPerMezzo(mezzoManutenzione);
-                        break;
-                    case 0:
-                        anncycle=false;
-                        System.out.println("Uscita dal programma.");
-                        break;
-
-                    default:
-                        System.out.println("Scelta non valida.");
-                }}
-            } else if (email.contains("@utente.com")) {
-
-                //Menù utente
-                System.out.println("Accesso effettuato come UTENTE.");
-                System.out.println("Scegli un'operazione:");
-                System.out.println("1. Crea Biglietto");
-                System.out.println("2. Crea Abbonamento");
-                System.out.println("3. Visualizza tratte disponibili");
-                int sceltaUtente = scanner.nextInt();
-                scanner.nextLine();
-
-                switch (sceltaUtente) {
-                    case 1:
-                        //Chiedo l'ID del distributore
-                        System.out.println("Seleziona l'ID del distributore:");
-                        dd.findAll();
-                        String idDistributore = scanner.nextLine();
-
-                        //Controllo se il distributore esiste
-                        System.out.println("Seleziona l'ID del mezzo:");
-                        md.findAll();
-                        String idMezzo = scanner.nextLine();
-
-                        //Identifico distributore e mezzo
-                        Distributore distributore = dd.findById(String.valueOf(UUID.fromString(idDistributore)));
-                        Mezzo mezzo = md.findById(idMezzo);
-
-                        //Creazione del biglietto
-                        Biglietto biglietto = dd.emettiBiglietto(distributore, mezzo);
-                        System.out.println("Biglietto creato con successo: " + biglietto);
-                        break;
-
-                    case 2:
-                        //Chiedo il tipo di abbonamento (settimanale o mensile)
-                        System.out.println("Abbonamento settimanale o mensile? (s/m)");
-                        String tipoAbbonamento = scanner.nextLine();
-                        boolean abbonamentoScelto; // True se settimanale, False se mensile
-
-                        //Controllo la scelta dell'utente
-                        if( tipoAbbonamento.equalsIgnoreCase("s")) {
-                            abbonamentoScelto = true;
-                            System.out.println("Abbonamento settimanale selezionato.");
-                        } else if (tipoAbbonamento.equalsIgnoreCase("m")) {
-                            abbonamentoScelto = false;
-                            System.out.println("Abbonamento mensile selezionato.");
-                        } else {
-                            System.out.println("Scelta non valida. Riprova.");
-                            break;
-                        }
-
-                        //Chiedo l'ID del distributore
-                        System.out.println("Seleziona l'ID del distributore:");
-                        dd.findAll();
-                        String idDistributoreAbb = scanner.nextLine();
-
-                        //Trovo il distributore
-                        System.out.println("Seleziona l'ID della tessera:");
-                        Distributore distributoreAbb = dd.findById(String.valueOf(UUID.fromString(idDistributoreAbb)));
-
-                        //Controllo se l'utente ha una tessera
-                        Tessera tessera = tessd.findByUtenteId(utente.getId().toString());
-                        if (tessera == null) {
-                            System.out.println("Nessuna tessera trovata per questo utente. Vuoi crearne una? (s/n)");
-                            String creaTessera = scanner.nextLine();
-                            if (creaTessera.equalsIgnoreCase("s")) {
-                                tessera = new Tessera(LocalDate.now(), LocalDate.now().plusYears(1), utente);
-                                tessd.save(tessera);
-                                System.out.println("Tessera creata con successo: " + tessera);
-                            } else {
-                                System.out.println("Operazione annullata.");
-                                break;
-                            }
-                        }
-
-                        //Emetto l'abbonamento
-                        dd.emettiAbbonamento(distributoreAbb, tessera, abbonamentoScelto);
-                        System.out.println("Abbonamento creato con successo.");
-                        break;
-
-                    case 3:
-                        System.out.println("---------- Tratte disponibili ----------");
-                        td.findAll(); // Mostra tutte le tratte
-                        break;
-
-                    default:
-                        System.out.println("Scelta non valida.");
-                }
-
-            } else {
-                System.out.println("Ruolo non riconosciuto.");
+            //Controllo se l'utente esiste e se la password è corretta
+            Utente utente = null;
+            try {
+                utente = ud.findByEmail(email);
+            } catch (Exception e) {
+                System.out.println("Errore durante la ricerca dell'utente: " + e.getMessage());
             }
-        } else {
-            System.out.println("Credenziali non valide.");
+
+            //Controllo se utente o amministratore
+            if (utente != null && utente.getPassword().equals(password)) {
+
+                //AMMINISTRATORE
+                if (email.contains("@amministratore.com")) {
+                    boolean anncycle= true;
+                    System.out.println("Accesso effettuato come AMMINISTRATORE.");
+                    while (anncycle){
+                        try {
+                            //Menù Amministratore
+
+                            System.out.println("Scegli che operazione vuoi effettuare:");
+                            System.out.println("1. Lista Utenti");
+                            System.out.println("2. Lista Tratte");
+                            System.out.println("3. Lista Mezzi");
+                            System.out.println("4. Gestione Biglietti");
+                            System.out.println("5. Lista Abbonamenti");
+                            System.out.println("6. Verifica numero manutenzioni per mezzo");
+                            System.out.println("0. Esci dal programma");
+                            int scelta = scanner.nextInt();
+                            scanner.nextLine();
+
+                            switch (scelta) {
+                                case 1:
+                                    try {
+                                        System.out.println("---------- Lista Utenti ----------");
+                                        ud.findAll(); // Mostra tutti gli utenti
+                                    } catch (Exception e) {
+                                        System.out.println("Errore nella visualizzazione utenti: " + e.getMessage());
+                                    }
+                                    break;
+                                case 2:
+                                    try {
+                                        System.out.println("---------- Lista Tratte ----------");
+                                        td.findAll(); // Mostra tutte le tratte
+
+                                        // Chiedo se l'amministratore vuole aggiungere una nuova tratta
+                                        System.out.println("Vuoi aggiungere una nuova tratta? (s/n)");
+                                        String sceltaTratta = scanner.nextLine();
+
+                                        if (Objects.equals(sceltaTratta, "s")) {
+
+                                            // Chiedo i dettagli della nuova tratta
+                                            System.out.print("Inserisci la zona di partenza: ");
+                                            String zonaPartenza = scanner.nextLine();
+
+                                            System.out.print("Inserisci la zona di arrivo: ");
+                                            String zonaArrivo = scanner.nextLine();
+
+                                            System.out.print("Inserisci la durata della tratta in minuti: ");
+                                            int tempoPrevisto = scanner.nextInt();
+                                            scanner.nextLine();
+
+                                            // Crea e salva la nuova tratta
+                                            Tratta nuovaTratta = new Tratta(zonaPartenza, tempoPrevisto, zonaArrivo);
+                                            td.save(nuovaTratta);
+                                            System.out.println("Nuova tratta aggiunta con successo: " + nuovaTratta);
+
+                                        } else {
+                                            System.out.println("Nessuna nuova tratta aggiunta.");
+                                        }
+                                    } catch (Exception e) {
+                                        System.out.println("Errore nella gestione delle tratte: " + e.getMessage());
+                                    }
+                                    break;
+
+                                case 3:
+                                    try {
+                                        System.out.println("---------- Lista Mezzi ----------");
+                                        md.findAll(); // Mostra tutti i mezzi
+
+                                        // Chiedo se l'amministratore vuole aggiungere un nuovo mezzo
+                                        System.out.println("Vuoi aggiungere un nuovo mezzo? (s/n)");
+                                        String sceltaMezzo = scanner.nextLine();
+
+                                        if (Objects.equals(sceltaMezzo, "s")) {
+
+                                            // Chiedo i dettagli del nuovo mezzo
+                                            System.out.print("Inserisci il tipo di mezzo (AUTOBUS/TRAM): ");
+                                            String tipoMezzo = scanner.nextLine().toUpperCase();
+
+                                            System.out.print("Inserisci la capienza del mezzo: ");
+                                            int capienza = scanner.nextInt();
+                                            scanner.nextLine();
+
+                                            TipoMezzo tipo = TipoMezzo.valueOf(tipoMezzo);
+
+                                            // Crea e salva il nuovo mezzo
+                                            Mezzo nuovoMezzo = new Mezzo(tipo, capienza);
+                                            md.save(nuovoMezzo);
+                                            System.out.println("Nuovo mezzo aggiunto con successo: " + nuovoMezzo);
+
+                                        } else {
+                                            System.out.println("Nessun nuovo mezzo aggiunto.");
+                                        }
+                                    } catch (Exception e) {
+                                        System.out.println("Errore nella gestione dei mezzi: " + e.getMessage());
+                                    }
+                                    break;
+
+                                case 4:
+                                    boolean sceltabiglietti = true;
+                                    while (sceltabiglietti) {
+                                        try {
+                                            // Gestione Biglietti
+
+                                            System.out.println("---------- Gestione Biglietti ----------");
+                                            System.out.println("1. Visualizza tutti i biglietti");
+                                            System.out.println("2. Visualizza biglietti in un intervallo di tempo");
+                                            System.out.println("3. Visualizza biglietti emessi da uno specifico distributore");
+                                            System.out.println("0. Torna al menù principale");
+                                            int sceltaBiglietti = scanner.nextInt();
+                                            scanner.nextLine();
+
+                                            switch (sceltaBiglietti) {
+                                                case 1:
+                                                    bd.findAll(); // Mostra tutti i biglietti
+                                                    break;
+
+                                                case 2:
+                                                    // Chiedo l'intervallo di date
+                                                    System.out.print("Data inizio (yyyy-mm-dd): ");
+                                                    LocalDate inizio = LocalDate.parse(scanner.nextLine());
+
+                                                    System.out.print("Data fine (yyyy-mm-dd): ");
+                                                    LocalDate fine = LocalDate.parse(scanner.nextLine());
+
+                                                    // Trovo i biglietti nell'intervallo
+                                                    bd.findByPeriodo(inizio, fine);
+                                                    break;
+
+                                                case 3:
+                                                    // Chiedo l'ID del distributore
+                                                    System.out.print("ID distributore: ");
+                                                    String idDistributore = scanner.nextLine();
+
+                                                    // Trovo i biglietti emessi dal distributore
+                                                    bd.findByDistributore(UUID.fromString(idDistributore));
+                                                    break;
+                                                case 0:
+                                                    sceltabiglietti = false;
+                                                    System.out.println("Tornando al menù principale...");
+                                                    break;
+
+                                                default:
+                                                    System.out.println("Scelta non valida.");
+                                            }
+                                            break;
+                                        } catch (Exception e) {
+                                            System.out.println("Errore nella gestione dei biglietti: " + e.getMessage());
+                                            sceltabiglietti = false;
+                                        }
+                                    }
+                                    break;
+
+                                case 5:
+                                    boolean sceltaAbbonamento = true;
+                                    while (sceltaAbbonamento) {
+                                        try {
+                                            // Gestione Abbonamenti
+                                            System.out.println("---------- Gestione Abbonamenti ----------");
+                                            System.out.println("1. Visualizza tutti gli abbonamenti");
+                                            System.out.println("2. Visualizza abbonamenti in un intervallo di tempo");
+                                            System.out.println("3. Visualizza abbonamenti emessi da uno specifico distributore");
+                                            System.out.println("0. Torna al menù principale");
+                                            int sceltaAbbonamenti = scanner.nextInt();
+                                            scanner.nextLine();
+
+                                            switch (sceltaAbbonamenti) {
+                                                case 1:
+                                                    ad.findAll(); // Mostra tutti gli abbonamenti
+                                                    break;
+                                                case 2:
+                                                    // Chiedo l'intervallo di date
+                                                    System.out.print("Data inizio (yyyy-mm-dd): ");
+                                                    LocalDate inizio = LocalDate.parse(scanner.nextLine());
+
+                                                    System.out.print("Data fine (yyyy-mm-dd): ");
+                                                    LocalDate fine = LocalDate.parse(scanner.nextLine());
+
+                                                    // Trovo gli abbonamenti nell'intervallo
+                                                    ad.findByPeriodo(inizio, fine);
+                                                    break;
+
+                                                case 3:
+                                                    // Chiedo l'ID del distributore
+                                                    System.out.print("ID distributore: ");
+                                                    String idDistributore = scanner.nextLine();
+
+                                                    // Trovo gli abbonamenti emessi dal distributore
+                                                    ad.findByDistributore(UUID.fromString(idDistributore));
+                                                    break;
+                                                case 0:
+                                                    sceltaAbbonamento = false;
+                                                    System.out.println("Tornando al menù principale...");
+                                                    break;
+
+                                                default:
+                                                    System.out.println("Scelta non valida.");
+                                            }
+
+                                        } catch (Exception e) {
+                                            System.out.println("Errore nella gestione degli abbonamenti: " + e.getMessage());
+                                            sceltaAbbonamento = false;
+                                        }
+                                    }    break;
+
+                                case 6:
+                                    try {
+                                        // Verifica numero manutenzioni per mezzo
+                                        System.out.println("---------- Verifica numero manutenzioni per mezzo ----------");
+                                        md.findAll(); // Mostra tutti i mezzi
+
+                                        System.out.print("Inserisci l'ID del mezzo: ");
+                                        String idMezzoManutenzione = scanner.nextLine();
+                                        Mezzo mezzoManutenzione = md.findById(idMezzoManutenzione);
+
+                                        // Controllo se il mezzo esiste
+                                        mand.countManutenzioniPerMezzo(mezzoManutenzione);
+                                    } catch (Exception e) {
+                                        System.out.println("Errore nella verifica delle manutenzioni: " + e.getMessage());
+                                    }
+                                    break;
+                                case 0:
+                                    anncycle=false;
+                                    System.out.println("Uscita dal programma.");
+                                    break;
+
+                                default:
+                                    System.out.println("Scelta non valida.");
+                            }
+                        } catch (Exception e) {
+                            System.out.println("Errore nel menù amministratore: " + e.getMessage());
+                        }
+                    }
+                } else if (email.contains("@utente.com")) {
+
+                    //Menù utente
+                    try {
+                        System.out.println("Accesso effettuato come UTENTE.");
+                        System.out.println("Scegli un'operazione:");
+                        System.out.println("1. Crea Biglietto");
+                        System.out.println("2. Crea Abbonamento");
+                        System.out.println("3. Visualizza tratte disponibili");
+                        int sceltaUtente = scanner.nextInt();
+                        scanner.nextLine();
+
+                        switch (sceltaUtente) {
+                            case 1:
+                                try {
+                                    //Chiedo l'ID del distributore
+                                    System.out.println("Seleziona l'ID del distributore:");
+                                    dd.findAll();
+                                    String idDistributore = scanner.nextLine();
+
+                                    //Controllo se il distributore esiste
+                                    System.out.println("Seleziona l'ID del mezzo:");
+                                    md.findAll();
+                                    String idMezzo = scanner.nextLine();
+
+                                    //Identifico distributore e mezzo
+                                    Distributore distributore = dd.findById(String.valueOf(UUID.fromString(idDistributore)));
+                                    Mezzo mezzo = md.findById(idMezzo);
+
+                                    //Creazione del biglietto
+                                    Biglietto biglietto = dd.emettiBiglietto(distributore, mezzo);
+                                    System.out.println("Biglietto creato con successo: " + biglietto);
+                                } catch (Exception e) {
+                                    System.out.println("Errore nella creazione del biglietto: " + e.getMessage());
+                                }
+                                break;
+
+                            case 2:
+                                try {
+                                    //Chiedo il tipo di abbonamento (settimanale o mensile)
+                                    System.out.println("Abbonamento settimanale o mensile? (s/m)");
+                                    String tipoAbbonamento = scanner.nextLine();
+                                    boolean abbonamentoScelto; // True se settimanale, False se mensile
+
+                                    //Controllo la scelta dell'utente
+                                    if( tipoAbbonamento.equalsIgnoreCase("s")) {
+                                        abbonamentoScelto = true;
+                                        System.out.println("Abbonamento settimanale selezionato.");
+                                    } else if (tipoAbbonamento.equalsIgnoreCase("m")) {
+                                        abbonamentoScelto = false;
+                                        System.out.println("Abbonamento mensile selezionato.");
+                                    } else {
+                                        System.out.println("Scelta non valida. Riprova.");
+                                        break;
+                                    }
+
+                                    //Chiedo l'ID del distributore
+                                    System.out.println("Seleziona l'ID del distributore:");
+                                    dd.findAll();
+                                    String idDistributoreAbb = scanner.nextLine();
+
+                                    //Trovo il distributore
+                                    System.out.println("Seleziona l'ID della tessera:");
+                                    Distributore distributoreAbb = dd.findById(String.valueOf(UUID.fromString(idDistributoreAbb)));
+
+                                    //Controllo se l'utente ha una tessera
+                                    Tessera tessera = tessd.findByUtenteId(utente.getId().toString());
+                                    if (tessera == null) {
+                                        System.out.println("Nessuna tessera trovata per questo utente. Vuoi crearne una? (s/n)");
+                                        String creaTessera = scanner.nextLine();
+                                        if (creaTessera.equalsIgnoreCase("s")) {
+                                            tessera = new Tessera(LocalDate.now(), LocalDate.now().plusYears(1), utente);
+                                            tessd.save(tessera);
+                                            System.out.println("Tessera creata con successo: " + tessera);
+                                        } else {
+                                            System.out.println("Operazione annullata.");
+                                            break;
+                                        }
+                                    }
+
+                                    //Emetto l'abbonamento
+                                    dd.emettiAbbonamento(distributoreAbb, tessera, abbonamentoScelto);
+                                    System.out.println("Abbonamento creato con successo.");
+                                } catch (Exception e) {
+                                    System.out.println("Errore nella creazione dell'abbonamento: " + e.getMessage());
+                                }
+                                break;
+
+                            case 3:
+                                try {
+                                    System.out.println("---------- Tratte disponibili ----------");
+                                    td.findAll(); // Mostra tutte le tratte
+                                } catch (Exception e) {
+                                    System.out.println("Errore nella visualizzazione delle tratte: " + e.getMessage());
+                                }
+                                break;
+
+                            default:
+                                System.out.println("Scelta non valida.");
+                        }
+                    } catch (Exception e) {
+                        System.out.println("Errore nel menù utente: " + e.getMessage());
+                    }
+
+                } else {
+                    System.out.println("Ruolo non riconosciuto.");
+                }
+            } else {
+                System.out.println("Credenziali non valide.");
+            }
+        } catch (Exception e) {
+            System.out.println("Errore generale nell'applicazione: " + e.getMessage());
+        } finally {
+            scanner.close();
+            emf.close();
+            em.close();
         }
 
         //UTENTI
@@ -469,8 +529,5 @@ public class Application {
 //        pd.save(percorrenza1);
 
 
-scanner.close();
- emf.close();
- em.close();
     }
 }
