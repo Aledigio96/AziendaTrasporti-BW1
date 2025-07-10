@@ -1,7 +1,6 @@
 package buildWeek.dao;
 
 import buildWeek.entities.Tessera;
-
 import buildWeek.exceptions.NoResultException;
 import buildWeek.exceptions.NotFoundException;
 import jakarta.persistence.EntityManager;
@@ -18,54 +17,65 @@ public class TesseraDAO {
         this.entityManager = entityManager;
     }
 
-//Metodo per salvare una nuova tessera
-    public void save(Tessera newtessera){
-        EntityTransaction transaction=  entityManager.getTransaction();
-        transaction.begin();
-        entityManager.persist(newtessera);
-        transaction.commit();
-        System.out.println("tessera salvata con successo");
+    // Metodo per salvare una nuova tessera
+    public void save(Tessera newtessera) {
+        EntityTransaction transaction = entityManager.getTransaction();
+        try {
+            transaction.begin();
+            entityManager.persist(newtessera);
+            transaction.commit();
+            System.out.println("Tessera salvata con successo");
+        } catch (Exception e) {
+            if (transaction.isActive()) transaction.rollback();
+            throw e;
+        }
     }
 
-//Metodo per trovare una tessera tramite il suo id
+    // Metodo per trovare una tessera tramite il suo id
     public Tessera findById(String id) {
         Tessera found = entityManager.find(Tessera.class, UUID.fromString(id));
         if (found == null) throw new NotFoundException(id);
         return found;
     }
 
-
-//Metodo per trovare una tessera tramite il suo id
+    // Metodo per trovare una tessera tramite il suo id ed eliminarla
     public void findByIdandDelete(UUID id) {
         EntityTransaction transaction = entityManager.getTransaction();
+        try {
+            transaction.begin();
 
-        transaction.begin();
+            Query query = entityManager.createQuery("DELETE FROM Tessera t WHERE t.id = :id");
+            query.setParameter("id", id);
 
-        Query query = entityManager.createQuery("DELETE FROM Tessera t WHERE t.id = :id");
-        query.setParameter("id", id);
-
-        query.executeUpdate();
-
-        transaction.commit();
-
-        System.out.println( "Tessera cancellata con successo!");
-    }
-
-//Metodo per trovare tutte le tessere
-    public void findAll(){
-        try { List<Tessera> tessere= entityManager.createQuery("SELECT t FROM Tessera t",Tessera.class).getResultList();
-            for(Tessera t: tessere){
-                System.out.println(t);
+            int deleted = query.executeUpdate();
+            if (deleted == 0) {
+                transaction.rollback();
+                throw new NotFoundException(id.toString());
             }
 
-        }catch (Exception e) {
-            System.out.println("Errore nel recupero degli tessere: " + e.getMessage());
-        } finally {
-            System.out.println("Tutti gli tessere sono stati recuperati con successo.");
+            transaction.commit();
+            System.out.println("Tessera cancellata con successo!");
+        } catch (Exception e) {
+            if (transaction.isActive()) transaction.rollback();
+            throw e;
         }
     }
 
-//Metodo per trovare una tessera tramite l'id dell'utente
+    // Metodo per trovare tutte le tessere
+    public void findAll() {
+        try {
+            List<Tessera> tessere = entityManager.createQuery("SELECT t FROM Tessera t", Tessera.class).getResultList();
+            for (Tessera t : tessere) {
+                System.out.println(t);
+            }
+        } catch (Exception e) {
+            System.out.println("Errore nel recupero delle tessere: " + e.getMessage());
+        } finally {
+            System.out.println("Tutte le tessere sono state recuperate con successo.");
+        }
+    }
+
+    // Metodo per trovare una tessera tramite l'id dell'utente
     public Tessera findByUtenteId(String utenteId) {
         try {
             return entityManager.createQuery(

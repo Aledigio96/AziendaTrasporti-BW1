@@ -1,7 +1,6 @@
 package buildWeek.dao;
 
 import buildWeek.entities.Abbonamento;
-import buildWeek.entities.Mezzo;
 import buildWeek.exceptions.NotFoundException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
@@ -19,11 +18,16 @@ public class AbbonamentoDAO {
 
 //SAVE
     public void save(Abbonamento newabbonamento){
-        EntityTransaction transaction=  entityManager.getTransaction();
-        transaction.begin();
-        entityManager.persist(newabbonamento);
-        transaction.commit();
-        System.out.println("Abbonamento salvato con successo");
+        EntityTransaction transaction = entityManager.getTransaction();
+        try {
+            transaction.begin();
+            entityManager.persist(newabbonamento);
+            transaction.commit();
+            System.out.println("Abbonamento salvato con successo");
+        } catch (Exception e) {
+            if (transaction.isActive()) transaction.rollback();
+            throw e;
+        }
     }
 
 //RICERCA TRAMITE ID
@@ -37,17 +41,25 @@ public class AbbonamentoDAO {
 //RICERCA TRAMITE ID E CANCELLAZIONE
     public void findByIdandDelete(UUID id) {
         EntityTransaction transaction = entityManager.getTransaction();
+        try {
+            transaction.begin();
 
-        transaction.begin();
+            Query query = entityManager.createQuery("DELETE FROM Abbonamento ab WHERE ab.id = :id");
+            query.setParameter("id", id);
 
-        Query query = entityManager.createQuery("DELETE FROM Abbonamento ab WHERE ab.id = :id");
-        query.setParameter("id", id);
+            int deletedCount = query.executeUpdate();
 
-        query.executeUpdate();
+            transaction.commit();
 
-        transaction.commit();
+            if (deletedCount == 0) {
+                throw new NotFoundException(id.toString());
+            }
 
-        System.out.println( "Abbonamento cancellato con successo!");
+            System.out.println("Abbonamento cancellato con successo!");
+        } catch (Exception e) {
+            if (transaction.isActive()) transaction.rollback();
+            throw e;
+        }
     }
 
     //ABBONAMENTO VALIDO O SCADUTO?

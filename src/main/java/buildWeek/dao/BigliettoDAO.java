@@ -21,10 +21,15 @@ public class BigliettoDAO {
 // Metodo per salvare un nuovo biglietto
     public void save(Biglietto newbiglietto){
         EntityTransaction transaction=  entityManager.getTransaction();
-        transaction.begin();
-        entityManager.persist(newbiglietto);
-        transaction.commit();
-        System.out.println("Biglietto salvato con successo");
+        try {
+            transaction.begin();
+            entityManager.persist(newbiglietto);
+            transaction.commit();
+            System.out.println("Biglietto salvato con successo");
+        } catch (Exception e) {
+            if (transaction.isActive()) transaction.rollback();
+            throw new RuntimeException("Errore durante il salvataggio del biglietto", e);
+        }
     }
 
 // Metodo per trovare un biglietto per ID
@@ -37,17 +42,19 @@ public class BigliettoDAO {
 // Metodo per cancellare un biglietto per ID
     public void findByIdandDelete(UUID id) {
         EntityTransaction transaction = entityManager.getTransaction();
-
-        transaction.begin();
-
-        Query query = entityManager.createQuery("DELETE FROM Biglietto b WHERE b.id = :id");
-        query.setParameter("id", id);
-
-        query.executeUpdate();
-
-        transaction.commit();
-
-        System.out.println( "Biglietto cancellato con successo!");
+        try {
+            transaction.begin();
+            Biglietto biglietto = entityManager.find(Biglietto.class, id);
+            if (biglietto == null) {
+                throw new NotFoundException(id.toString());
+            }
+            entityManager.remove(biglietto);
+            transaction.commit();
+            System.out.println("Biglietto cancellato con successo!");
+        } catch (Exception e) {
+            if (transaction.isActive()) transaction.rollback();
+            throw new RuntimeException("Errore durante la cancellazione del biglietto", e);
+        }
     }
 
 // Metodo per validare un biglietto

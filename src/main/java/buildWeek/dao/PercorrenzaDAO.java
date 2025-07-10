@@ -16,11 +16,17 @@ public class PercorrenzaDAO {
 
     // Metodo per salvare una nuova percorrenza
     public void save(Percorrenza newpercorrenza){
-        EntityTransaction transaction=  entityManager.getTransaction();
-        transaction.begin();
-        entityManager.persist(newpercorrenza);
-        transaction.commit();
-        System.out.println("Percorrenza salvata con successo");
+        EntityTransaction transaction = entityManager.getTransaction();
+        try {
+            transaction.begin();
+            entityManager.persist(newpercorrenza);
+            transaction.commit();
+            System.out.println("Percorrenza salvata con successo");
+        } catch (Exception e) {
+            if (transaction.isActive()) transaction.rollback();
+            System.err.println("Errore durante il salvataggio della percorrenza: " + e.getMessage());
+            throw e;
+        }
     }
 
 //Metodo per trovare una percorrenza per ID
@@ -34,17 +40,26 @@ public class PercorrenzaDAO {
 // Metodo per cancellare una percorrenza per ID
     public void findByIdandDelete(UUID id) {
         EntityTransaction transaction = entityManager.getTransaction();
+        try {
+            transaction.begin();
 
-        transaction.begin();
+            Query query = entityManager.createQuery("DELETE FROM Percorrenza p WHERE p.id = :id");
+            query.setParameter("id", id);
 
-        Query query = entityManager.createQuery("DELETE FROM Percorrenza p WHERE p.id = :id");
-        query.setParameter("id", id);
+            int deletedCount = query.executeUpdate();
 
-        query.executeUpdate();
+            transaction.commit();
 
-        transaction.commit();
-
-        System.out.println( "Percorrenza cancellata con successo!");
+            if (deletedCount > 0) {
+                System.out.println("Percorrenza cancellata con successo!");
+            } else {
+                System.out.println("Nessuna percorrenza trovata con l'ID specificato: " + id);
+            }
+        } catch (Exception e) {
+            if (transaction.isActive()) transaction.rollback();
+            System.err.println("Errore durante la cancellazione della percorrenza: " + e.getMessage());
+            throw e;
+        }
     }
 
     // Metodo per contare le percorrenze di un mezzo su una tratta specifica
@@ -57,4 +72,3 @@ public class PercorrenzaDAO {
         return (long) query.getSingleResult();
     }
 }
-

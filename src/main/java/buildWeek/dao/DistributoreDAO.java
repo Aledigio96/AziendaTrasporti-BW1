@@ -20,10 +20,15 @@ public class DistributoreDAO {
 // Metodo per salvare un nuovo distributore
     public void save(Distributore newdistributore){
         EntityTransaction transaction=  entityManager.getTransaction();
-        transaction.begin();
-        entityManager.persist(newdistributore);
-        transaction.commit();
-        System.out.println("Distrubutore salvato con successo");
+        try {
+            transaction.begin();
+            entityManager.persist(newdistributore);
+            transaction.commit();
+            System.out.println("Distrubutore salvato con successo");
+        } catch (Exception e) {
+            if (transaction.isActive()) transaction.rollback();
+            throw new RuntimeException("Errore durante il salvataggio del distributore", e);
+        }
     }
 
 // Metodo per trovare un distributore per ID
@@ -36,17 +41,21 @@ public class DistributoreDAO {
 // Metodo per trovare un distributore per nome
     public void findByIdandDelete(UUID id) {
         EntityTransaction transaction = entityManager.getTransaction();
+        try {
+            transaction.begin();
 
-        transaction.begin();
+            Query query = entityManager.createQuery("DELETE FROM Distributore d WHERE d.id = :id");
+            query.setParameter("id", id);
 
-        Query query = entityManager.createQuery("DELETE FROM Distributore d WHERE d.id = :id");
-        query.setParameter("id", id);
+            query.executeUpdate();
 
-        query.executeUpdate();
+            transaction.commit();
 
-        transaction.commit();
-
-        System.out.println( "Distributore cancellato con successo!");
+            System.out.println( "Distributore cancellato con successo!");
+        } catch (Exception e) {
+            if (transaction.isActive()) transaction.rollback();
+            throw new RuntimeException("Errore durante l'eliminazione del distributore", e);
+        }
     }
 
     //Emissione biglietto

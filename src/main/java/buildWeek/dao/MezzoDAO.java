@@ -20,40 +20,51 @@ public class MezzoDAO {
 
 // Metodo per salvare un nuovo mezzo
     public void save(Mezzo newmezzo){
-        EntityTransaction transaction=  entityManager.getTransaction();
-        transaction.begin();
-        entityManager.persist(newmezzo);
-        transaction.commit();
-        System.out.println("Mezzo salvato con successo");
+        EntityTransaction transaction = entityManager.getTransaction();
+        try {
+            transaction.begin();
+            entityManager.persist(newmezzo);
+            transaction.commit();
+            System.out.println("Mezzo salvato con successo");
+        } catch (Exception e) {
+            if (transaction.isActive()) transaction.rollback();
+            System.out.println("Errore nel salvataggio del mezzo: " + e.getMessage());
+        }
     }
 
 // Metodo per trovare un mezzo per ID
     public Mezzo findById(String id) {
-        Mezzo found = entityManager.find(Mezzo.class, UUID.fromString(id));
-        if (found == null) throw new NotFoundException(id);
-        return found;
+        try {
+            Mezzo found = entityManager.find(Mezzo.class, UUID.fromString(id));
+            if (found == null) throw new NotFoundException(id);
+            return found;
+        } catch (Exception e) {
+            System.out.println("Errore nella ricerca del mezzo: " + e.getMessage());
+            throw e;
+        }
     }
 
 
 // Metodo per trovare un mezzo per zona di partenza
     public void findByIdandDelete(UUID id) {
         EntityTransaction transaction = entityManager.getTransaction();
-
-        transaction.begin();
-
-        Query query = entityManager.createQuery("DELETE FROM Mezzo m WHERE m.id = :id");
-        query.setParameter("id", id);
-
-        query.executeUpdate();
-
-        transaction.commit();
-
-        System.out.println( "Mezzo cancellato con successo!");
+        try {
+            transaction.begin();
+            Query query = entityManager.createQuery("DELETE FROM Mezzo m WHERE m.id = :id");
+            query.setParameter("id", id);
+            query.executeUpdate();
+            transaction.commit();
+            System.out.println( "Mezzo cancellato con successo!");
+        } catch (Exception e) {
+            if (transaction.isActive()) transaction.rollback();
+            System.out.println("Errore nella cancellazione del mezzo: " + e.getMessage());
+        }
     }
 
     // Metodo per contare i mezzi associati a una tratta
     public void findAll(){
-        try { List<Mezzo> mezzi= entityManager.createQuery("SELECT m FROM Mezzo m",Mezzo.class).getResultList();
+        try {
+            List<Mezzo> mezzi= entityManager.createQuery("SELECT m FROM Mezzo m",Mezzo.class).getResultList();
             for(Mezzo m: mezzi){
                 System.out.println(m);
             }

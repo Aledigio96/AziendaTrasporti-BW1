@@ -19,11 +19,16 @@ public class ManutenzioneDAO {
 
 // Metodo per salvare una nuova manutenzione
     public void save(Manutenzione newmanutenzione){
-        EntityTransaction transaction=  entityManager.getTransaction();
-        transaction.begin();
-        entityManager.persist(newmanutenzione);
-        transaction.commit();
-        System.out.println("Manutenzione salvata con successo");
+        EntityTransaction transaction = entityManager.getTransaction();
+        try {
+            transaction.begin();
+            entityManager.persist(newmanutenzione);
+            transaction.commit();
+            System.out.println("Manutenzione salvata con successo");
+        } catch (Exception e) {
+            if (transaction.isActive()) transaction.rollback();
+            throw e;
+        }
     }
 
 // Metodo per trovare una manutenzione per ID
@@ -37,28 +42,25 @@ public class ManutenzioneDAO {
 // Metodo per cancellare una manutenzione per ID
     public void findByIdandDelete(UUID id) {
         EntityTransaction transaction = entityManager.getTransaction();
-
-        transaction.begin();
-
-        Query query = entityManager.createQuery("DELETE FROM Manutenzione m WHERE m.id = :id");
-        query.setParameter("id", id);
-
-        query.executeUpdate();
-
-        transaction.commit();
-
-        System.out.println( "Manutenzione cancellata con successo!");
+        try {
+            transaction.begin();
+            Manutenzione manutenzione = entityManager.find(Manutenzione.class, id);
+            if (manutenzione == null) throw new NotFoundException(id.toString());
+            entityManager.remove(manutenzione);
+            transaction.commit();
+            System.out.println("Manutenzione cancellata con successo!");
+        } catch (Exception e) {
+            if (transaction.isActive()) transaction.rollback();
+            throw e;
+        }
     }
 
 // Metodo per contare il numero di manutenzioni per un mezzo specifico
     public long countManutenzioniPerMezzo(Mezzo idMezzo) {
-        EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
         Query query = entityManager.createQuery("SELECT count(m) FROM Manutenzione m WHERE m.idMezzo = :idMezzo");
         query.setParameter("idMezzo", idMezzo);
         Object result = query.getSingleResult();
         Long count = (Long) result;
-        transaction.commit();
         System.out.println("Numero di manutenzioni per il mezzo: " + count);
 
         return count;

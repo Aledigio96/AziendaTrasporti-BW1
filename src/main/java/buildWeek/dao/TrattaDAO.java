@@ -1,13 +1,9 @@
 package buildWeek.dao;
 
-import buildWeek.entities.Mezzo;
 import buildWeek.entities.Tratta;
-import buildWeek.entities.Utente;
 import buildWeek.exceptions.NotFoundException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.NoResultException;
-import jakarta.persistence.Query;
 
 import java.util.List;
 import java.util.UUID;
@@ -19,62 +15,60 @@ public class TrattaDAO {
         this.entityManager = entityManager;
     }
 
-//Metodo per salvare una nuova tratta
+    // Metodo per salvare una nuova tratta con gestione sicura della transazione
     public void save(Tratta newTratta) {
         EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        entityManager.persist(newTratta);
-        transaction.commit();
-        System.out.println("Tratta salvata con successo");
+        try {
+            transaction.begin();
+            entityManager.persist(newTratta);
+            transaction.commit();
+            System.out.println("Tratta salvata con successo");
+        } catch (Exception e) {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            System.out.println("Errore durante il salvataggio della tratta: " + e.getMessage());
+        }
     }
 
-// Metodo per trovare una tratta per ID
+    // Metodo per trovare una tratta per ID
     public Tratta findById(String id) {
         Tratta found = entityManager.find(Tratta.class, UUID.fromString(id));
         if (found == null) throw new NotFoundException(id);
         return found;
     }
 
-    // Metodo per trovare una tratta per zona di partenza
-    public Tratta findByZonaPartenza(String zonaPartenza) {
-        try {
-            return entityManager.createQuery(
-                            "SELECT t FROM Tratta t WHERE t.zonaPartenza = :zonaPartenza", Tratta.class)
-                    .setParameter("zonaPartenza", zonaPartenza)
-                    .getSingleResult();
-        } catch (NoResultException e) {
-            return null;
-        }
+    // Metodo per trovare tutte le tratte con una determinata zona di partenza
+    public List<Tratta> findByZonaPartenza(String zonaPartenza) {
+        return entityManager.createQuery(
+                        "SELECT t FROM Tratta t WHERE t.zonaPartenza = :zonaPartenza", Tratta.class)
+                .setParameter("zonaPartenza", zonaPartenza)
+                .getResultList();
     }
 
-    // Metodo per trovare una tratta per zona di arrivo
-    public void findByIdandDelete(UUID id) {
+    // Metodo per cancellare una tratta per ID con verifica esistenza e gestione sicura della transazione
+    public void deleteById(UUID id) {
         EntityTransaction transaction = entityManager.getTransaction();
-
-        transaction.begin();
-
-        Query query = entityManager.createQuery("DELETE FROM Tratta tr WHERE tr.id = :id");
-        query.setParameter("id", id);
-
-        query.executeUpdate();
-
-        transaction.commit();
-
-        System.out.println( "Tratta cancellato con successo!");
+        try {
+            transaction.begin();
+            Tratta tratta = entityManager.find(Tratta.class, id);
+            if (tratta != null) {
+                entityManager.remove(tratta);
+                System.out.println("Tratta cancellata con successo!");
+            } else {
+                System.out.println("Tratta con ID " + id + " non trovata.");
+            }
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            System.out.println("Errore durante l'eliminazione della tratta: " + e.getMessage());
+        }
     }
 
-
-    // Metodo per trovare una tratta per mezzo
-    public void findAll(){
-        try { List<Tratta> tratte= entityManager.createQuery("SELECT t FROM Tratta t",Tratta.class).getResultList();
-            for(Tratta t: tratte){
-                System.out.println(t);
-            }
-
-        }catch (Exception e) {
-            System.out.println("Errore nel recupero delle tratte: " + e.getMessage());
-        } finally {
-            System.out.println("Tutte le tratte sono state recuperate con successo.");
-        }
+    // Metodo per recuperare tutte le tratte
+    public List<Tratta> findAll() {
+        return entityManager.createQuery("SELECT t FROM Tratta t", Tratta.class).getResultList();
     }
 }

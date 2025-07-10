@@ -16,42 +16,52 @@ public class UtenteDAO {
         this.entityManager = entityManager;
     }
 
-//Metodo per salvare un nuovo utente
-    public void save(Utente newutente){
-        EntityTransaction transaction=  entityManager.getTransaction();
-        transaction.begin();
-        entityManager.persist(newutente);
-        transaction.commit();
-        System.out.println("Utente salvato con successo");
+    // Metodo per salvare un nuovo utente con gestione sicura della transazione
+    public void save(Utente newutente) {
+        EntityTransaction transaction = entityManager.getTransaction();
+        try {
+            transaction.begin();
+            entityManager.persist(newutente);
+            transaction.commit();
+            System.out.println("Utente salvato con successo");
+        } catch (Exception e) {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            System.out.println("Errore nel salvataggio utente: " + e.getMessage());
+        }
     }
 
-//Metodo per cercare un utente per ID
+    // Metodo per cercare un utente per ID
     public Utente findById(String id) {
         Utente found = entityManager.find(Utente.class, UUID.fromString(id));
         if (found == null) throw new NotFoundException(id);
         return found;
-
     }
 
-
-//Metodo per cercare un utente per ID e cancellarlo
-    public void findByIdandDelete(UUID id) {
+    // Metodo per cercare un utente per ID e cancellarlo in modo sicuro
+    public void deleteById(UUID id) {
         EntityTransaction transaction = entityManager.getTransaction();
+        try {
+            transaction.begin();
 
-        transaction.begin();
+            Utente utente = entityManager.find(Utente.class, id);
+            if (utente == null) {
+                throw new NotFoundException(id.toString());
+            }
 
-        Query query = entityManager.createQuery("DELETE FROM Utente u WHERE u.id = :id");
-        query.setParameter("id", id);
-
-        query.executeUpdate();
-
-        transaction.commit();
-
-        System.out.println( "Utente cancellato con successo!");
+            entityManager.remove(utente);
+            transaction.commit();
+            System.out.println("Utente cancellato con successo!");
+        } catch (Exception e) {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            System.out.println("Errore durante la cancellazione: " + e.getMessage());
+        }
     }
 
-
-//Metodo per cercare un utente per email
+    // Metodo per cercare un utente per email
     public Utente findByEmail(String email) {
         try {
             return entityManager.createQuery(
@@ -63,18 +73,18 @@ public class UtenteDAO {
         }
     }
 
-
-    // Metodo per cercare tutti gli utenti
-        public void findAll(){
-            try { List<Utente> utenti= entityManager.createQuery("SELECT u FROM Utente u",Utente.class).getResultList();
-                for(Utente u: utenti){
-                    System.out.println(u);
-                }
-
-            }catch (Exception e) {
-                System.out.println("Errore nel recupero degli utenti: " + e.getMessage());
-            } finally {
-                System.out.println("Tutti gli utenti sono stati recuperati con successo.");
+    // Metodo per cercare tutti gli utenti (non modificato in questa richiesta)
+    public void findAll() {
+        try {
+            List<Utente> utenti = entityManager.createQuery("SELECT u FROM Utente u", Utente.class)
+                    .getResultList();
+            for (Utente u : utenti) {
+                System.out.println(u);
             }
+        } catch (Exception e) {
+            System.out.println("Errore nel recupero degli utenti: " + e.getMessage());
+        } finally {
+            System.out.println("Tutti gli utenti sono stati recuperati con successo.");
         }
+    }
 }
