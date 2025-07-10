@@ -4,6 +4,7 @@ import buildWeek.dao.*;
 import buildWeek.entities.*;
 import buildWeek.enums.StatoDistributoreAutomatico;
 import buildWeek.enums.TipoMezzo;
+import buildWeek.enums.TipoRivenditoreAutorizzato;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
@@ -201,12 +202,17 @@ public class Application {
                                                     break;
 
                                                 case 3:
-                                                    // Chiedo l'ID del distributore
+                                                   // Chiedo l'ID del distributore
+                                                    System.out.println("Distributori disponibili:");
+                                                    dd.findAll();
                                                     System.out.print("ID distributore: ");
                                                     String idDistributore = scanner.nextLine();
 
                                                     // Trovo i biglietti emessi dal distributore
-                                                    bd.findByDistributore(UUID.fromString(idDistributore));
+                                                    List<Biglietto> biglietti = bd.findByDistributore(UUID.fromString(idDistributore));
+                                                    for (Biglietto b : biglietti) {
+                                                        System.out.println(b);
+                                                    }
                                                     break;
                                                 case 0:
                                                     sceltabiglietti = false;
@@ -350,14 +356,14 @@ public class Application {
                                             Mezzo mezzo = md.findById(idMezzo);
 
                                             // Creazione biglietto
-                                            Biglietto biglietto = new Biglietto(LocalDate.now(), false, null, mezzo);
-                                            biglietto.setIdDistributore(distributore);
+                                            Biglietto biglietto = new Biglietto(LocalDate.now(), false, null, mezzo, distributore.getId());
+                                            biglietto.setIdDistributore(distributore.getId());
                                             bd.save(biglietto);
 
-                                            System.out.println("✅ Biglietto creato con successo: " + biglietto);
+                                            System.out.println(" Biglietto creato con successo: " + biglietto);
 
                                         } catch (Exception e) {
-                                            System.out.println("❌ Errore nella creazione del biglietto: " + e.getMessage());
+                                            System.out.println(" Errore nella creazione del biglietto: " + e.getMessage());
                                         }
                                         break;
 
@@ -443,15 +449,13 @@ public class Application {
         } catch (Exception e) {
             System.out.println("Errore generale nell'applicazione: " + e.getMessage());
         } finally {
-            scanner.close();
-            emf.close();
-            em.close();
+
         }
 
         //UTENTI
-//        Utente utente1= new Utente("Alessandro","Di Giovanni","alessandr.g@gmail.com","1234", LocalDate.now().minusYears(29));
-       Utente utente2 = new Utente("Maria", "Rossi", "maria.rossi@amministratore.com", "abcd", LocalDate.now().minusYears(25));
-        Utente utente3 = new Utente("Giovanni", "Bianchi", "giovanni.bianchi@utente.com", "password", LocalDate.now().minusYears(34));
+//
+//        Utente utente2 = new Utente("Maria", "Rossi", "maria.rossi@amministratore.com", "abcd", LocalDate.now().minusYears(25));
+//        Utente utente3 = new Utente("Giovanni", "Bianchi", "giovanni.bianchi@utente.com", "password", LocalDate.now().minusYears(34));
 //        Utente utente4 = new Utente("Laura", "Verdi", "laura.verdi@utente.com", "qwerty", LocalDate.now().minusYears(22));
 //        Utente utente5 = new Utente("Marco", "Neri", "marco.neri@utente.com", "9876", LocalDate.now().minusYears(30));
 //        Utente utente6 = new Utente("Federica", "Gialli", "federica.gialli@utente.com", "12345", LocalDate.now().minusYears(28));
@@ -459,8 +463,17 @@ public class Application {
 //        Utente utente8 = new Utente("Elena", "Perni", "elena.perni@utente.com", "elena123", LocalDate.now().minusYears(31));
 //        Utente utente9 = new Utente("Francesco", "Marroni", "francesco.marroni@amministratore.com", "francesco99", LocalDate.now().minusYears(26));
 //        Utente utente10 = new Utente("Giulia", "Rossi", "giulia.rossi@utente.com", "giulia2023", LocalDate.now().minusYears(24));
+//
+//
+//        Utente utente2fromdb = ud.findById("2c4866e4-345f-4ebe-9537-e0b149f81812");
+//        Utente utente3fromdb = ud.findById("5161b5d2-1068-4433-bc02-a8ee9f11e446");
+//        Utente utente4fromdb = ud.findById("a0b14ebc-7b03-477e-9df0-dba76f1c4452");
+//        Utente utente5fromdb = ud.findById("bb6b2c71-7a7b-4de3-9acf-31cd63b55a7b");
+//        Utente utente6fromdb = ud.findById("c64a7186-0bd6-4147-83a6-80fc4e2dabea");
+//        Utente utente7fromdb = ud.findById("cefc0835-176b-4841-835c-4215ea15a989");
+//        Utente utente8fromdb = ud.findById("d3a25ba8-746a-49b5-8a1d-6cee4f864863");
 
-//        Utente utente1fromdb = ud.findById("a644f18d-6188-4127-bf4d-db5196bd2940");
+
 
 //        ud.save(utente1);
        // ud.save(utente2);
@@ -475,18 +488,23 @@ public class Application {
 
 
         //TRATTE
-//        Tratta tratta1= new Tratta("Roma",120,"Latina");
-//        Tratta tratta2 = new Tratta("Frosinone",120, "Afragola");
-//        Tratta tratta3 = new Tratta("Viterbo",60, "Rieti");
-//        Tratta tratta4 = new Tratta("Civitavecchia", 50,"Ostia");
-//        Tratta tratta5 = new Tratta("Ciampino",40, "Frascati");
-//        Tratta tratta6 = new Tratta("Albano Laziale",70, "Pomezia");
-//        Tratta tratta7 = new Tratta("Cassi",80, "Anzio");
-//        Tratta tratta8 = new Tratta("Velletri",120, "Ariccia");
-//        Tratta tratta9 = new Tratta("Tivoli",20, "Guidonia");
-//        Tratta tratta10 = new Tratta("Sora",120, "Monteporzio Catone");
+//        Tratta tratta1= new Tratta("Roma",120,"Frosinone",null);
+//        Tratta tratta2 = new Tratta("Frosinone",120, "Afragola",null);
+//        Tratta tratta3 = new Tratta("Viterbo",60, "Rieti",null);
+//        Tratta tratta4 = new Tratta("Civitavecchia", 50,"Ostia",null);
+//        Tratta tratta5 = new Tratta("Ciampino",40, "Frascati",null);
+//        Tratta tratta6 = new Tratta("Albano Laziale",70, "Pomezia",null);
+//        Tratta tratta7 = new Tratta("Cassi",80, "Anzio",null);
+//        Tratta tratta8 = new Tratta("Velletri",120, "Ariccia",null);
+//        Tratta tratta9 = new Tratta("Tivoli",20, "Guidonia",null);
+//        Tratta tratta10 = new Tratta("Sora",120, "Monteporzio Catone",null);
 //
-//        //Tratta tratta1fromdb= td.findById("8024c49b-ce4a-407c-9a71-c347918b0d99");
+//        Tratta tratta1fromdb= td.findById("02ec6228-1932-41e6-a143-e9a41d619492");
+//        Tratta tratta2fromdb= td.findById("162d104f-00b8-4255-9fb1-ca8fb8995d51");
+//        Tratta tratta3fromdb= td.findById("1c75d1cb-ffc4-43db-9c6f-8c1186968ccb");
+//        Tratta tratta4fromdb= td.findById("218908d0-8960-4a58-b341-487e3240a92e");
+//        Tratta tratta5fromdb= td.findById("4dcb9834-811a-4e4c-abea-b594eab7e5b7");
+//        Tratta tratta6fromdb= td.findById("98e6364a-879a-4ef7-84eb-b6069021cf84");
 //
 //        td.save(tratta1);
 //        td.save(tratta2);
@@ -501,30 +519,43 @@ public class Application {
 
 
         //TESSERE
-//        Tessera tessera1= new Tessera(LocalDate.now(),LocalDate.now().minusDays(30),utente1fromdb);
-
-//        Tessera tessera1fromdb = tessd.findById("09fe1c1b-9d10-4cbf-9fa6-bac85a0290f1");
-
+//        Tessera tessera1= new Tessera(LocalDate.now(),LocalDate.now().plusYears(1),utente2fromdb);
 //        tessd.save(tessera1);
+//        Tessera tessera2= new Tessera(LocalDate.now(),LocalDate.now().plusYears(1),utente3fromdb);
+//        tessd.save(tessera2);
+//        Tessera tessera3= new Tessera(LocalDate.now(),LocalDate.now().plusYears(1),utente4fromdb);
+//        tessd.save(tessera3);
+//        Tessera tessera4= new Tessera(LocalDate.now(),LocalDate.now().plusYears(1),utente5fromdb);
+//        tessd.save(tessera4);
+//        Tessera tessera5= new Tessera(LocalDate.now(),LocalDate.now().plusYears(1),utente6fromdb);
+//        tessd.save(tessera5);
+//        Tessera tessera6= new Tessera(LocalDate.now(),LocalDate.now().plusYears(1),utente7fromdb);
+//        tessd.save(tessera6);
+//        Tessera tessera7= new Tessera(LocalDate.now(),LocalDate.now().plusYears(1),utente8fromdb);
+//        tessd.save(tessera7);
+
+
+
 
 
         //MEZZI
-//        Mezzo mezzo1 = new Mezzo(TipoMezzo.AUTOBUS, 50);
-//        Mezzo mezzo2 = new Mezzo(TipoMezzo.AUTOBUS, 60);
-//        Mezzo mezzo3 = new Mezzo(TipoMezzo.AUTOBUS, 70);
-//        Mezzo mezzo4 = new Mezzo(TipoMezzo.AUTOBUS, 80);
-//        Mezzo mezzo5 = new Mezzo(TipoMezzo.AUTOBUS, 90);
-//        Mezzo mezzo6 = new Mezzo(TipoMezzo.TRAM, 100);
-//        Mezzo mezzo7 = new Mezzo(TipoMezzo.TRAM, 120);
-//        Mezzo mezzo8 = new Mezzo(TipoMezzo.TRAM, 150);
-//        Mezzo mezzo9 = new Mezzo(TipoMezzo.TRAM, 180);
-//        Mezzo mezzo10 = new Mezzo(TipoMezzo.TRAM, 200);
+//        Mezzo mezzo1 = new Mezzo(TipoMezzo.TRAM,120, LocalTime.of(10, 30),tratta1fromdb);
+//        Mezzo mezzo2 = new Mezzo(TipoMezzo.AUTOBUS, 60,LocalTime.of(11,25),tratta1fromdb);
+//        Mezzo mezzo3 = new Mezzo(TipoMezzo.AUTOBUS, 70,LocalTime.of(23,13),tratta4fromdb);
+//        Mezzo mezzo4 = new Mezzo(TipoMezzo.AUTOBUS, 80,LocalTime.of(12,30),tratta3fromdb);
+//        Mezzo mezzo5 = new Mezzo(TipoMezzo.AUTOBUS, 90,LocalTime.of(9,30),tratta5fromdb);
+//        Mezzo mezzo6 = new Mezzo(TipoMezzo.TRAM, 100,LocalTime.of(9,00),tratta5fromdb);
+//        Mezzo mezzo7 = new Mezzo(TipoMezzo.TRAM, 120,LocalTime.of(9,30),tratta6fromdb);
+//        Mezzo mezzo8 = new Mezzo(TipoMezzo.TRAM, 150,LocalTime.of(11,00),tratta6fromdb);
+//        Mezzo mezzo9 = new Mezzo(TipoMezzo.TRAM, 180,LocalTime.of(14,25),tratta2fromdb);
+//        Mezzo mezzo10 = new Mezzo(TipoMezzo.TRAM, 200,LocalTime.of(20,25),tratta4fromdb);
 
-//        Mezzo mezzo1fromdb = md.findById("575cba6f-16a4-48de-a025-17137cf6b7a6");
-//        Mezzo mezzo2fromdb = md.findById("2a809425-78ed-4563-841a-e7c08c1baab1");
-//        Mezzo mezzo3fromdb = md.findById("472c77c1-3c10-4315-96d7-6c07c73d49de");
-//        Mezzo mezzo4fromdb = md.findById("575cba6f-16a4-48de-a025-17137cf6b7a6");
-//        Mezzo mezzo5fromdb = md.findById("91361440-4e5f-49f5-8589-105149e4b6a7");
+//        Mezzo mezzo1fromdb = md.findById("1cd64cfa-334b-4aea-9ff4-9f777ae704bb");
+//        Mezzo mezzo2fromdb = md.findById("225d317a-e961-41bb-8d72-48d992efdf57");
+//        Mezzo mezzo3fromdb = md.findById("2716c9ba-3ad1-4a00-8792-924fe6bd9719");
+//        Mezzo mezzo4fromdb = md.findById("57883f92-3d68-453c-9a05-fc83036c366a");
+//        Mezzo mezzo5fromdb = md.findById("60958dde-8e5e-4605-bfc1-905baea3e5ec");
+//        Mezzo mezzo6fromdb = md.findById("707a064f-da28-4ba2-87bc-3ac42b652401");
 
 //        md.save(mezzo1);
 //        md.save(mezzo2);
@@ -538,8 +569,20 @@ public class Application {
 //        md.save(mezzo10);
 
         //DISTRIBUTORI
-//        DistributoreAutomatico distributore1= new DistributoreAutomatico("Roma", StatoDistributoreAutomatico.INSERVIZIO);
-//        dd.save(distributore1);
+//        DistributoreAutomatico distributore2= new DistributoreAutomatico("Frosinone", StatoDistributoreAutomatico.INSERVIZIO);
+//        dd.save(distributore2);
+//        DistributoreAutomatico distributore3= new DistributoreAutomatico("Afragola", StatoDistributoreAutomatico.INSERVIZIO);
+//        dd.save(distributore3);
+//        DistributoreAutomatico distributore4= new DistributoreAutomatico("Latina", StatoDistributoreAutomatico.INSERVIZIO);
+//        dd.save(distributore4);
+//        DistributoreAutomatico distributore5= new DistributoreAutomatico("Monte Porzio Catone", StatoDistributoreAutomatico.INSERVIZIO);
+//        dd.save(distributore5);
+//        DistributoreAutomatico distributore6= new DistributoreAutomatico("Ciampino", StatoDistributoreAutomatico.FUORISERVIZIO);
+//        dd.save(distributore6);
+//        RivenditoreAutorizzato distributore7= new RivenditoreAutorizzato("Fiumicino", TipoRivenditoreAutorizzato.EDICOLA);
+//        dd.save(distributore7);
+//        RivenditoreAutorizzato distributore8= new RivenditoreAutorizzato("Ciampino", TipoRivenditoreAutorizzato.TABACCHINO);
+//        dd.save(distributore8);
 
         //BIGLIETTI
 //        Biglietto biglietto1=new Biglietto(LocalDate.now(),false,LocalDate.now().plusDays(1),mezzo1fromdb);
@@ -555,22 +598,36 @@ public class Application {
 
         //MANUTENZIONI
 //        Manutenzione manutenzione1=new Manutenzione(LocalDate.now(),LocalDate.now().minusDays(30),mezzo1fromdb);
-//        Manutenzione manutenzione1 = new Manutenzione(LocalDate.now(), LocalDate.now().minusDays(30), mezzo1fromdb);
+//        Manutenzione manutenzione6 = new Manutenzione(LocalDate.now(), LocalDate.now().minusDays(30), mezzo1fromdb);
 //        Manutenzione manutenzione2 = new Manutenzione(LocalDate.now().minusDays(5), LocalDate.now().minusDays(35), mezzo2fromdb);
-//        Manutenzione manutenzione3 = new Manutenzione(LocalDate.now().minusDays(10), LocalDate.now().minusDays(40), mezzo3fromdb);
+//        Manutenzione manutenzione3 = new Manutenzione(LocalDate.now().minusDays(10), LocalDate.now().minusDays(40), mezzo2fromdb);
 //        Manutenzione manutenzione4 = new Manutenzione(LocalDate.now().minusDays(15), LocalDate.now().minusDays(45), mezzo4fromdb);
 //        Manutenzione manutenzione5 = new Manutenzione(LocalDate.now().minusDays(20), LocalDate.now().minusDays(50), mezzo5fromdb);
-//
+
 //        mand.save(manutenzione1);
 //        mand.save(manutenzione2);
 //        mand.save(manutenzione3);
 //        mand.save(manutenzione4);
 //        mand.save(manutenzione5);
+//        mand.save(manutenzione6);
 
         //PERCORRENZE
-//        Percorrenza percorrenza1= new Percorrenza(30,40,mezzo1fromdb,tratta1fromdb);
+//        Percorrenza percorrenza1= new Percorrenza(110,mezzo1fromdb,tratta1fromdb);
+//        pd.save(percorrenza1);
+//        Percorrenza percorrenza2= new Percorrenza(100,mezzo2fromdb,tratta1fromdb);
+//        pd.save(percorrenza1);
+//        Percorrenza percorrenza3= new Percorrenza(180,mezzo3fromdb,tratta4fromdb);
+//        pd.save(percorrenza1);
+//        Percorrenza percorrenza4= new Percorrenza(90,mezzo4fromdb,tratta3fromdb);
+//        pd.save(percorrenza1);
+//        Percorrenza percorrenza5= new Percorrenza(30,mezzo5fromdb,tratta5fromdb);
+//        pd.save(percorrenza1);
+//        Percorrenza percorrenza6= new Percorrenza(145,mezzo6fromdb,tratta5fromdb);
 //        pd.save(percorrenza1);
 
-
+        scanner.close();
+        emf.close();
+        em.close();
     }
+
 }

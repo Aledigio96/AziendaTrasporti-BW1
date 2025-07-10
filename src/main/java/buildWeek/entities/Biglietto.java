@@ -21,19 +21,19 @@ public class Biglietto {
     @JoinColumn(name = "mezzo_id", nullable = false, unique = true)
     private Mezzo idmezzo;
 
-    @ManyToOne
-    @JoinColumn(name = "distributore_id",referencedColumnName = "id", nullable = false, unique = true)
-    private Distributore idDistributore;
+    @Column(name = "distributore_id")
+    private UUID idDistributore;
 
     public Biglietto(){}
 
-    public Biglietto( LocalDate dataemissione, boolean validazione, LocalDate orariovalidazione, Mezzo idmezzo) {
+    public Biglietto( LocalDate dataemissione, boolean validazione, LocalDate orariovalidazione, Mezzo idmezzo, UUID idDistributore) {
 
         this.dataemissione = dataemissione;
         this.validazione = validazione;
         this.orariovalidazione = orariovalidazione;
         this.idmezzo = idmezzo;
         this.scadenza=dataemissione.plusYears(1);
+        this.idDistributore = idDistributore;
     }
 
     public UUID getId() {
@@ -73,12 +73,13 @@ public class Biglietto {
     public void setIdmezzo(Mezzo idmezzo) {
         this.idmezzo = idmezzo;
     }
-    public void setIdDistributore(Distributore idDistributore) {
-        this.idDistributore = idDistributore;
+
+    public UUID getIdDistributore() {
+        return idDistributore;
     }
 
-    public Distributore getIdDistributore() {
-        return idDistributore;
+    public void setIdDistributore(UUID idDistributore) {
+        this.idDistributore = idDistributore;
     }
 
     public LocalDate getScadenza() {
@@ -98,6 +99,8 @@ public class Biglietto {
                 ", validazione=" + validazione +
                 ", orariovalidazione=" + orariovalidazione +
                 ", idmezzo=" + idmezzo +
+                ", idDistributore=" + idDistributore +
                 '}';
     }
 }
+

@@ -1,14 +1,12 @@
 package buildWeek.dao;
 
-import buildWeek.entities.Abbonamento;
 import buildWeek.entities.Biglietto;
-import buildWeek.entities.Mezzo;
 import buildWeek.exceptions.NotFoundException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.Query;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 public class BigliettoDAO {
@@ -107,11 +105,11 @@ public class BigliettoDAO {
     }
 
 // Metodo per trovare biglietti emessi da un distributore specifico
-    public void findByDistributore(UUID distributoreId) {
-        var biglietti = entityManager.createQuery(
-                        "SELECT b FROM Biglietto b WHERE b.distributore.id = :id", Biglietto.class)
-                .setParameter("id", distributoreId)
-                .getResultList();
-        biglietti.forEach(System.out::println);
-    }
+public List<Biglietto> findByDistributore(UUID distributore) {
+    return entityManager.createQuery(
+                    "SELECT b FROM Biglietto b WHERE b.idDistributore = :distributore", Biglietto.class)
+            .setParameter("distributore", distributore)
+            .getResultList();
+}
+
 }
