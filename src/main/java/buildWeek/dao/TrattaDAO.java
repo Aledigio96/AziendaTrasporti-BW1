@@ -68,7 +68,10 @@ public class TrattaDAO {
     }
 
     // Metodo per recuperare tutte le tratte
-    public List<Tratta> findAll() {
-        return entityManager.createQuery("SELECT t FROM Tratta t", Tratta.class).getResultList();
+    public void findAll() {
+        List<Tratta> tratte= entityManager.createQuery("SELECT t FROM Tratta t", Tratta.class).getResultList();
+        for (Tratta t:tratte) {
+            System.out.println(t);
+        }
     }
 }

@@ -73,6 +73,13 @@ public class Biglietto {
     public void setIdmezzo(Mezzo idmezzo) {
         this.idmezzo = idmezzo;
     }
+    public void setIdDistributore(Distributore idDistributore) {
+        this.idDistributore = idDistributore;
+    }
+
+    public Distributore getIdDistributore() {
+        return idDistributore;
+    }
 
     public LocalDate getScadenza() {
         return scadenza;

@@ -75,4 +75,15 @@ public class MezzoDAO {
             System.out.println("Tutti i mezzi sono stati recuperati con successo.");
         }
     }
+    public List<Mezzo> findByTratta(Tratta tratta) {
+        try {
+            return entityManager.createQuery("SELECT m FROM Mezzo m WHERE m.tratta = :tratta", Mezzo.class)
+                    .setParameter("tratta", tratta)
+                    .getResultList();
+        } catch (Exception e) {
+            System.out.println("Errore durante la ricerca dei mezzi per la tratta: " + e.getMessage());
+            return List.of(); // Ritorna una lista vuota in caso di errore
+        }
+    }
+
 }
