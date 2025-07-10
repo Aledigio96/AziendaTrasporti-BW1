@@ -18,7 +18,7 @@ public class TesseraDAO {
         this.entityManager = entityManager;
     }
 
-
+//Metodo per salvare una nuova tessera
     public void save(Tessera newtessera){
         EntityTransaction transaction=  entityManager.getTransaction();
         transaction.begin();
@@ -27,7 +27,7 @@ public class TesseraDAO {
         System.out.println("tessera salvata con successo");
     }
 
-
+//Metodo per trovare una tessera tramite il suo id
     public Tessera findById(String id) {
         Tessera found = entityManager.find(Tessera.class, UUID.fromString(id));
         if (found == null) throw new NotFoundException(id);
@@ -35,7 +35,7 @@ public class TesseraDAO {
     }
 
 
-
+//Metodo per trovare una tessera tramite il suo id
     public void findByIdandDelete(UUID id) {
         EntityTransaction transaction = entityManager.getTransaction();
 
@@ -51,6 +51,7 @@ public class TesseraDAO {
         System.out.println( "Tessera cancellata con successo!");
     }
 
+//Metodo per trovare tutte le tessere
     public void findAll(){
         try { List<Tessera> tessere= entityManager.createQuery("SELECT t FROM Tessera t",Tessera.class).getResultList();
             for(Tessera t: tessere){
@@ -64,6 +65,7 @@ public class TesseraDAO {
         }
     }
 
+//Metodo per trovare una tessera tramite l'id dell'utente
     public Tessera findByUtenteId(String utenteId) {
         try {
             return entityManager.createQuery(

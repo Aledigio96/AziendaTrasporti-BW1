@@ -17,7 +17,7 @@ public class DistributoreDAO {
         this.entityManager = entityManager;
     }
 
-
+// Metodo per salvare un nuovo distributore
     public void save(Distributore newdistributore){
         EntityTransaction transaction=  entityManager.getTransaction();
         transaction.begin();
@@ -26,14 +26,14 @@ public class DistributoreDAO {
         System.out.println("Distrubutore salvato con successo");
     }
 
-
+// Metodo per trovare un distributore per ID
     public Distributore findById(String id) {
         Distributore found = entityManager.find(Distributore.class, UUID.fromString(id));
         if (found == null) throw new NotFoundException(id);
         return found;
     }
 
-
+// Metodo per trovare un distributore per nome
     public void findByIdandDelete(UUID id) {
         EntityTransaction transaction = entityManager.getTransaction();
 
@@ -48,7 +48,6 @@ public class DistributoreDAO {
 
         System.out.println( "Distributore cancellato con successo!");
     }
-
 
     //Emissione biglietto
     public Biglietto emettiBiglietto(Distributore distributore, Mezzo mezzo) {
@@ -99,7 +98,9 @@ public class DistributoreDAO {
         }
     }
 
+    // Metodo per contare le emissioni di biglietti e abbonamenti in un intervallo di date
     public void stampaConteggioEmissioni(LocalDate inizio, LocalDate fine) {
+
         // Conteggio biglietti
         Long numeroBiglietti = entityManager.createQuery("""
             SELECT COUNT(b) FROM Biglietto b
@@ -123,6 +124,7 @@ public class DistributoreDAO {
         System.out.println("Abbonamenti emessi: " + numeroAbbonamenti);
     }
 
+    // Metodo per trovare tutti i distributori
     public void findAll() {
         try {
             List<Distributore> distributori = entityManager.createQuery("SELECT d FROM Distributore d", Distributore.class).getResultList();

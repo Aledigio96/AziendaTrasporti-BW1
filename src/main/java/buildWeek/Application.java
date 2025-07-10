@@ -292,10 +292,14 @@ public class Application {
                     //Menù utente
                     try {
                         System.out.println("Accesso effettuato come UTENTE.");
+
+                        boolean cycleUtente = true;
+                        while(cycleUtente){
                         System.out.println("Scegli un'operazione:");
                         System.out.println("1. Crea Biglietto");
                         System.out.println("2. Crea Abbonamento");
                         System.out.println("3. Visualizza tratte disponibili");
+                            System.out.println("0. Esci dal programma");
                         int sceltaUtente = scanner.nextInt();
                         scanner.nextLine();
 
@@ -384,9 +388,14 @@ public class Application {
                                 }
                                 break;
 
+                                case 0:
+                                    cycleUtente = false;
+                                    System.out.println("Uscita dal programma.");
+                                    break;
+
                             default:
                                 System.out.println("Scelta non valida.");
-                        }
+                        }}
                     } catch (Exception e) {
                         System.out.println("Errore nel menù utente: " + e.getMessage());
                     }

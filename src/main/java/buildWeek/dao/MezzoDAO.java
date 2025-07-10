@@ -18,7 +18,7 @@ public class MezzoDAO {
         this.entityManager = entityManager;
     }
 
-
+// Metodo per salvare un nuovo mezzo
     public void save(Mezzo newmezzo){
         EntityTransaction transaction=  entityManager.getTransaction();
         transaction.begin();
@@ -27,7 +27,7 @@ public class MezzoDAO {
         System.out.println("Mezzo salvato con successo");
     }
 
-
+// Metodo per trovare un mezzo per ID
     public Mezzo findById(String id) {
         Mezzo found = entityManager.find(Mezzo.class, UUID.fromString(id));
         if (found == null) throw new NotFoundException(id);
@@ -35,7 +35,7 @@ public class MezzoDAO {
     }
 
 
-
+// Metodo per trovare un mezzo per zona di partenza
     public void findByIdandDelete(UUID id) {
         EntityTransaction transaction = entityManager.getTransaction();
 
@@ -51,6 +51,7 @@ public class MezzoDAO {
         System.out.println( "Mezzo cancellato con successo!");
     }
 
+    // Metodo per contare i mezzi associati a una tratta
     public void findAll(){
         try { List<Mezzo> mezzi= entityManager.createQuery("SELECT m FROM Mezzo m",Mezzo.class).getResultList();
             for(Mezzo m: mezzi){

@@ -16,7 +16,7 @@ public class UtenteDAO {
         this.entityManager = entityManager;
     }
 
-
+//Metodo per salvare un nuovo utente
     public void save(Utente newutente){
         EntityTransaction transaction=  entityManager.getTransaction();
         transaction.begin();
@@ -25,7 +25,7 @@ public class UtenteDAO {
         System.out.println("Utente salvato con successo");
     }
 
-
+//Metodo per cercare un utente per ID
     public Utente findById(String id) {
         Utente found = entityManager.find(Utente.class, UUID.fromString(id));
         if (found == null) throw new NotFoundException(id);
@@ -34,7 +34,7 @@ public class UtenteDAO {
     }
 
 
-
+//Metodo per cercare un utente per ID e cancellarlo
     public void findByIdandDelete(UUID id) {
         EntityTransaction transaction = entityManager.getTransaction();
 
@@ -49,6 +49,9 @@ public class UtenteDAO {
 
         System.out.println( "Utente cancellato con successo!");
     }
+
+
+//Metodo per cercare un utente per email
     public Utente findByEmail(String email) {
         try {
             return entityManager.createQuery(
@@ -61,7 +64,7 @@ public class UtenteDAO {
     }
 
 
-
+    // Metodo per cercare tutti gli utenti
         public void findAll(){
             try { List<Utente> utenti= entityManager.createQuery("SELECT u FROM Utente u",Utente.class).getResultList();
                 for(Utente u: utenti){

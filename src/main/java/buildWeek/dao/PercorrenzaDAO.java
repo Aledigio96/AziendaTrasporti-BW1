@@ -10,10 +10,11 @@ import java.util.UUID;
 
 public class PercorrenzaDAO {
     private final EntityManager entityManager;
-
     public PercorrenzaDAO(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
+
+    // Metodo per salvare una nuova percorrenza
     public void save(Percorrenza newpercorrenza){
         EntityTransaction transaction=  entityManager.getTransaction();
         transaction.begin();
@@ -22,7 +23,7 @@ public class PercorrenzaDAO {
         System.out.println("Percorrenza salvata con successo");
     }
 
-
+//Metodo per trovare una percorrenza per ID
     public Percorrenza findById(String id) {
         Percorrenza found = entityManager.find(Percorrenza.class, UUID.fromString(id));
         if (found == null) throw new NotFoundException(id);
@@ -30,7 +31,7 @@ public class PercorrenzaDAO {
     }
 
 
-
+// Metodo per cancellare una percorrenza per ID
     public void findByIdandDelete(UUID id) {
         EntityTransaction transaction = entityManager.getTransaction();
 
@@ -46,6 +47,7 @@ public class PercorrenzaDAO {
         System.out.println( "Percorrenza cancellata con successo!");
     }
 
+    // Metodo per contare le percorrenze di un mezzo su una tratta specifica
     public long contaPercorrenzeMezzoTratta(String mezzoId, String trattaId) {
         Query query = entityManager.createQuery(
                 "SELECT COUNT(p) FROM Percorrenza p WHERE p.idMezzo.id = :mezzoId AND p.idTratta.id = :trattaId"

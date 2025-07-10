@@ -17,7 +17,7 @@ public class ManutenzioneDAO {
         this.entityManager = entityManager;
     }
 
-
+// Metodo per salvare una nuova manutenzione
     public void save(Manutenzione newmanutenzione){
         EntityTransaction transaction=  entityManager.getTransaction();
         transaction.begin();
@@ -26,7 +26,7 @@ public class ManutenzioneDAO {
         System.out.println("Manutenzione salvata con successo");
     }
 
-
+// Metodo per trovare una manutenzione per ID
     public Manutenzione findById(String id) {
         Manutenzione found = entityManager.find(Manutenzione.class, UUID.fromString(id));
         if (found == null) throw new NotFoundException(id);
@@ -34,7 +34,7 @@ public class ManutenzioneDAO {
     }
 
 
-
+// Metodo per cancellare una manutenzione per ID
     public void findByIdandDelete(UUID id) {
         EntityTransaction transaction = entityManager.getTransaction();
 
@@ -49,6 +49,8 @@ public class ManutenzioneDAO {
 
         System.out.println( "Manutenzione cancellata con successo!");
     }
+
+// Metodo per contare il numero di manutenzioni per un mezzo specifico
     public long countManutenzioniPerMezzo(Mezzo idMezzo) {
         EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();

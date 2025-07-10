@@ -17,7 +17,7 @@ public class AbbonamentoDAO {
         this.entityManager = entityManager;
     }
 
-
+//SAVE
     public void save(Abbonamento newabbonamento){
         EntityTransaction transaction=  entityManager.getTransaction();
         transaction.begin();
@@ -26,7 +26,7 @@ public class AbbonamentoDAO {
         System.out.println("Abbonamento salvato con successo");
     }
 
-
+//RICERCA TRAMITE ID
     public Abbonamento findById(String id) {
         Abbonamento found = entityManager.find(Abbonamento.class, UUID.fromString(id));
         if (found == null) throw new NotFoundException(id);
@@ -34,7 +34,7 @@ public class AbbonamentoDAO {
     }
 
 
-
+//RICERCA TRAMITE ID E CANCELLAZIONE
     public void findByIdandDelete(UUID id) {
         EntityTransaction transaction = entityManager.getTransaction();
 
@@ -50,6 +50,7 @@ public class AbbonamentoDAO {
         System.out.println( "Abbonamento cancellato con successo!");
     }
 
+    //ABBONAMENTO VALIDO O SCADUTO?
     public boolean abbonamentoValidoOscaduto(String id) {
         Abbonamento abbonamento = findById(id);
         LocalDate oggi= LocalDate.now();
@@ -64,11 +65,13 @@ public class AbbonamentoDAO {
         }
     }
 
+//RICERCA TUTTI ABBONAMENTI
     public void findAll() {
         var abbonamenti = entityManager.createQuery("SELECT a FROM Abbonamento a", Abbonamento.class).getResultList();
         abbonamenti.forEach(System.out::println);
     }
 
+//RICERCA ABBONAMENTI PER PERIODO
     public void findByPeriodo(LocalDate inizio, LocalDate fine) {
         var abbonamenti = entityManager.createQuery(
                         "SELECT a FROM Abbonamento a WHERE a.dataEmissione BETWEEN :inizio AND :fine", Abbonamento.class)
@@ -78,6 +81,7 @@ public class AbbonamentoDAO {
         abbonamenti.forEach(System.out::println);
     }
 
+//RICERCA ABBONAMENTI PER DISTRIBUTORE
     public void findByDistributore(UUID distributoreId) {
         var abbonamenti = entityManager.createQuery(
                         "SELECT a FROM Abbonamento a WHERE a.idDistributore.id = :id", Abbonamento.class)

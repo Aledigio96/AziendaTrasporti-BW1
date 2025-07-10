@@ -19,7 +19,7 @@ public class TrattaDAO {
         this.entityManager = entityManager;
     }
 
-
+//Metodo per salvare una nuova tratta
     public void save(Tratta newTratta) {
         EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
@@ -28,13 +28,14 @@ public class TrattaDAO {
         System.out.println("Tratta salvata con successo");
     }
 
-
+// Metodo per trovare una tratta per ID
     public Tratta findById(String id) {
         Tratta found = entityManager.find(Tratta.class, UUID.fromString(id));
         if (found == null) throw new NotFoundException(id);
         return found;
     }
 
+    // Metodo per trovare una tratta per zona di partenza
     public Tratta findByZonaPartenza(String zonaPartenza) {
         try {
             return entityManager.createQuery(
@@ -46,6 +47,7 @@ public class TrattaDAO {
         }
     }
 
+    // Metodo per trovare una tratta per zona di arrivo
     public void findByIdandDelete(UUID id) {
         EntityTransaction transaction = entityManager.getTransaction();
 
@@ -61,6 +63,8 @@ public class TrattaDAO {
         System.out.println( "Tratta cancellato con successo!");
     }
 
+
+    // Metodo per trovare una tratta per mezzo
     public void findAll(){
         try { List<Tratta> tratte= entityManager.createQuery("SELECT t FROM Tratta t",Tratta.class).getResultList();
             for(Tratta t: tratte){

@@ -18,7 +18,7 @@ public class BigliettoDAO {
         this.entityManager = entityManager;
     }
 
-
+// Metodo per salvare un nuovo biglietto
     public void save(Biglietto newbiglietto){
         EntityTransaction transaction=  entityManager.getTransaction();
         transaction.begin();
@@ -27,15 +27,14 @@ public class BigliettoDAO {
         System.out.println("Biglietto salvato con successo");
     }
 
-
+// Metodo per trovare un biglietto per ID
     public Biglietto findById(String id) {
         Biglietto found = entityManager.find(Biglietto.class, UUID.fromString(id));
         if (found == null) throw new NotFoundException(id);
         return found;
     }
 
-
-
+// Metodo per cancellare un biglietto per ID
     public void findByIdandDelete(UUID id) {
         EntityTransaction transaction = entityManager.getTransaction();
 
@@ -51,6 +50,7 @@ public class BigliettoDAO {
         System.out.println( "Biglietto cancellato con successo!");
     }
 
+// Metodo per validare un biglietto
     public void validaBiglietto(UUID id) {
         EntityTransaction transaction = entityManager.getTransaction();
         try {
@@ -67,6 +67,8 @@ public class BigliettoDAO {
             throw new RuntimeException("Errore durante la validazione del biglietto", e);
         }
     }
+
+// Metodo per verificare se un biglietto è valido o scaduto
     public boolean bigliettoValidoOscaduto(String id) {
         Biglietto biglietto = findById(id);
         LocalDate oggi= LocalDate.now();
@@ -81,11 +83,13 @@ public class BigliettoDAO {
         }
     }
 
+// Metodo per trovare tutti i biglietti
     public void findAll() {
         var biglietti = entityManager.createQuery("SELECT b FROM Biglietto b", Biglietto.class).getResultList();
         biglietti.forEach(System.out::println);
     }
 
+// Metodo per trovare biglietti emessi in un periodo specifico
     public void findByPeriodo(LocalDate inizio, LocalDate fine) {
         var biglietti = entityManager.createQuery(
                         "SELECT b FROM Biglietto b WHERE b.dataemissione BETWEEN :inizio AND :fine", Biglietto.class)
@@ -95,6 +99,7 @@ public class BigliettoDAO {
         biglietti.forEach(System.out::println);
     }
 
+// Metodo per trovare biglietti emessi da un distributore specifico
     public void findByDistributore(UUID distributoreId) {
         var biglietti = entityManager.createQuery(
                         "SELECT b FROM Biglietto b WHERE b.distributore.id = :id", Biglietto.class)
