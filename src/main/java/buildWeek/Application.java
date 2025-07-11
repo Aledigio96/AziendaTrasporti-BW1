@@ -388,12 +388,12 @@ public class Application {
                                     }
 
                                     //Chiedo l'ID del distributore
-                                    System.out.println("Seleziona l'ID del distributore:");
                                     dd.findAll();
+                                    System.out.println("Seleziona l'ID del distributore:");
                                     String idDistributoreAbb = scanner.nextLine();
 
                                     //Trovo il distributore
-                                    System.out.println("Seleziona l'ID della tessera:");
+
                                     Distributore distributoreAbb = dd.findById(String.valueOf(UUID.fromString(idDistributoreAbb)));
 
                                     //Controllo se l'utente ha una tessera

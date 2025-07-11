@@ -33,11 +33,12 @@ public class Abbonamento {
 
     public Abbonamento() {}
 
-    public Abbonamento( LocalDate dataEmissione, LocalDate dataScadenza, Tessera tessera) {
+    public Abbonamento( LocalDate dataEmissione, LocalDate dataScadenza, Tessera tessera, Distributore idDistributore) {
 
         this.dataEmissione = dataEmissione;
         this.dataScadenza = dataScadenza;
         this.tessera = tessera;
+        this.idDistributore = idDistributore;
     }
 
     // Getters
@@ -58,6 +59,9 @@ public class Abbonamento {
         return tessera;
     }
 
+    public Distributore getIdDistributore() {
+        return idDistributore;
+    }
     // Setters
 
     public void setDataEmissione(LocalDate dataEmissione) {
@@ -70,6 +74,9 @@ public class Abbonamento {
 
     public void setTessera(Tessera tessera) {
         this.tessera = tessera;
+    }
+    public void setIdDistributore(Distributore idDistributore) {
+        this.idDistributore = idDistributore;
     }
 
     @Override

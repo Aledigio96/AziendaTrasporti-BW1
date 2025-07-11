@@ -68,6 +68,7 @@ public class DistributoreDAO {
             biglietto.setDataemissione(LocalDate.now());
             biglietto.setValidazione(false);
             biglietto.setIdmezzo(mezzo);
+            biglietto.setIdDistributore(distributore.getId());
 
             entityManager.persist(biglietto);
 
@@ -95,6 +96,7 @@ public class DistributoreDAO {
             abbonamento.setDataEmissione(dataEmissione);
             abbonamento.setDataScadenza(dataScadenza);
             abbonamento.setTessera(tessera);
+            abbonamento.setIdDistributore(distribuore);
 
             entityManager.persist(abbonamento);
 

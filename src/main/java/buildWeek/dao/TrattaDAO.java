@@ -73,5 +73,6 @@ public class TrattaDAO {
         for (Tratta t:tratte) {
             System.out.println(t);
         }
+
     }
 }

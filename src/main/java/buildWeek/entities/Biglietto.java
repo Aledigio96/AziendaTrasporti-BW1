@@ -18,7 +18,7 @@ public class Biglietto {
     private LocalDate orariovalidazione;
 
     @ManyToOne
-    @JoinColumn(name = "mezzo_id", nullable = false, unique = true)
+    @JoinColumn(name = "mezzo_id", nullable = false)
     private Mezzo idmezzo;
 
     @Column(name = "distributore_id")
